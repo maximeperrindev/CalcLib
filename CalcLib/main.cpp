@@ -16,8 +16,42 @@ typedef struct {
 }
 lentier;
 
+int getNumbersChar(char* a) {
+    return strlen(a);
+}
+
+int remplirTab(int taille, char *a) {
+    int tailleNombre = taille;
+    unsigned int nombre = 0;
+    int indice = 0;
+    int nombreCase = 0;
+    int indicePuissance = 0;
+    while (indice<tailleNombre) {
+        nombre = 0;
+        for (; indice < tailleNombre; indice++) {
+            for (int y = indicePuissance; y <= indice; y++) {
+                nombre += ((int)a[y]-48) * pow(10, y-indicePuissance);
+            }  
+            if (nombre >= pow(2, 32) - 1) {
+                break;
+            }
+            
+        }
+        indicePuissance = indice;
+        nombreCase++;
+    }
+    return nombreCase;
+}
+
 int main(int argc, const char * argv[]) {
     
+    char* nombre1 = new char[100];
+    cin >> nombre1;
+    int size = getNumbersChar(nombre1);
+    cout << size << endl;
+
+    cout << remplirTab(size, nombre1) << endl;
+
     lentier a;
     lentier b;
     lentier s;
@@ -61,3 +95,6 @@ int main(int argc, const char * argv[]) {
     delete[] s.p;
     return 0;
 }
+
+
+
