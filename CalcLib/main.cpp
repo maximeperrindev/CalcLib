@@ -144,7 +144,15 @@ int main(int argc, const char * argv[]) {
     unsigned int c = 0;
     for (int i = s.size-2; i >= 0; i--) {
 
-        s.p[i+1] = (a.p[i] + b.p[i] + c) % 4294967296;
+        if (a.size > b.size && i >= b.size) {
+            s.p[s.size-1-i] = (a.p[i] + c) % 4294967296;
+        }
+        else if (b.size > a.size&& i >= a.size) {
+            s.p[s.size-1-i] = (b.p[i] + c) % 4294967296;
+        }
+        else {
+            s.p[s.size-1-i] = (a.p[i] + b.p[i] + c) % 4294967296;
+        }
 
         if (a.p[i] + b.p[i] + c < 4294967296) {
 
