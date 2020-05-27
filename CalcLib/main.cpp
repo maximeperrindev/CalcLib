@@ -22,7 +22,7 @@ int getNumbersChar(char* a) {
 }
 
 int tailleBase(int taille, char *a) {
-    unsigned int nombre = 0;
+    unsigned long int nombre = 0;
     int indice = 0;
     int nombreCase = 0;
     int indicePuissance = 0;
@@ -109,15 +109,20 @@ int main(int argc, const char * argv[]) {
         cout << b.p[i] << endl;
     }
     
-    s.size = 30;
+    if (a.size < b.size) {
+        s.size = b.size + 1;
+    }
+    else {
+        s.size = a.size + 1;
+    }
     s.p = new unsigned int[s.size]();
 
     unsigned int c = 0;
     for (int i = s.size-2; i >= 0; i--) {
 
-        s.p[i] = (a.p[i] + b.p[i] + c) % 4294967295;
+        s.p[i+1] = (a.p[i] + b.p[i] + c) % 4294967296;
 
-        if (a.p[i] + b.p[i] + c < 4294967295) {
+        if (a.p[i] + b.p[i] + c < 4294967296) {
 
             c = 0;
         }
@@ -127,7 +132,7 @@ int main(int argc, const char * argv[]) {
         }
     }
     s.p[0] = c;
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < s.size; i++) {
         cout << s.p[i];
     }
 
