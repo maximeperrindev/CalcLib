@@ -20,17 +20,17 @@ int getNumbersChar(char* a) {
     return strlen(a);
 }
 
-int remplirTab(int taille, char *a) {
-    int tailleNombre = taille;
+int tailleBase(int taille, char *a) {
     unsigned int nombre = 0;
     int indice = 0;
     int nombreCase = 0;
     int indicePuissance = 0;
-    while (indice<tailleNombre) {
+    while (indice<taille) {
         nombre = 0;
-        for (; indice < tailleNombre; indice++) {
+        for (; indice < taille; indice++) {
+            nombre = 0;
             for (int y = indicePuissance; y <= indice; y++) {
-                nombre += ((int)a[y]-48) * pow(10, y-indicePuissance);
+                nombre += ((int)a[taille-y-1]-48) * pow(10, y-indicePuissance);
             }  
             if (nombre >= pow(2, 32) - 1) {
                 break;
@@ -43,40 +43,65 @@ int remplirTab(int taille, char *a) {
     return nombreCase;
 }
 
+void remplirTableau(int taille, int tailleBase, char* a, unsigned int* nb) {
+    unsigned int nombre = 0;
+    int indicePuissance = 0;
+    int indice = 0;
+    int caseRempli = 0;
+    for (int i = 0; i < tailleBase; i++) {
+        nombre = 0;
+        for (; indice < taille; indice++) {       
+            nombre = 0;
+            for (int y = indicePuissance; y <= indice; y++) {
+                nombre += ((int)a[taille-y-1] - 48) * pow(10, y - indicePuissance);
+            }
+            if (nombre >= pow(2, 32) - 1) {
+                indicePuissance = indice;
+                break;
+            }
+            nb[caseRempli] = nombre;
+        }
+        caseRempli++;
+    }
+}
+
 int main(int argc, const char * argv[]) {
     
-    char* nombre1 = new char[100];
-    cin >> nombre1;
-    int size = getNumbersChar(nombre1);
-    cout << size << endl;
-
-    cout << remplirTab(size, nombre1) << endl;
-
     lentier a;
     lentier b;
     lentier s;
 
-    a.size = 10;
-    a.p = new unsigned int[a.size](); 
+    char* nombre1 = new char[100];
+    cin >> nombre1;
 
-    b.size = 10;
-    b.p = new unsigned int[b.size];
+    char* nombre2 = new char[100];
+    cin >> nombre2;
 
-    for (int i = 0; i < 10; i++) {
-        a.p[i] = 9;
-        b.p[i] = 9;
-        cout << a.p[i];
+    a.size = tailleBase(getNumbersChar(nombre1), nombre1);
+    a.p = new unsigned int[a.size]();
+
+    remplirTableau(getNumbersChar(nombre1), a.size, nombre1, a.p);
+    for (int i = 0; i < a.size; i++) {
+        cout << a.p[i] << endl;
     }
-    cout << endl;
-    s.size = 11;
-    s.p = new unsigned int[s.size];
+
+    b.size = tailleBase(getNumbersChar(nombre2), nombre2);
+    b.p = new unsigned int[b.size]();
+
+    remplirTableau(getNumbersChar(nombre2), b.size, nombre2, b.p);
+    for (int i = 0; i < b.size; i++) {
+        cout << b.p[i] << endl;
+    }
+    
+    s.size = 30;
+    s.p = new unsigned int[s.size]();
 
     unsigned int c = 0;
     for (int i = s.size-2; i >= 0; i--) {
 
-        s.p[i+1] = (a.p[i] + b.p[i] + c) % 10;
+        s.p[i] = (a.p[i] + b.p[i] + c) % 4294967295;
 
-        if (a.p[i] + b.p[i] + c < 10) {
+        if (a.p[i] + b.p[i] + c < 4294967295) {
 
             c = 0;
         }
