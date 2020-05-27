@@ -22,7 +22,7 @@ int getNumbersChar(char* a) {
 }
 
 int tailleBase(int taille, char *a) {
-    unsigned int nombre = 0;
+    unsigned long int nombre = 0;
     int indice = 0;
     int nombreCase = 0;
     int indicePuissance = 0;
@@ -45,7 +45,7 @@ int tailleBase(int taille, char *a) {
 }
 
 void remplirTableau(int taille, int tailleBase, char* a, unsigned int* nb) {
-    unsigned int nombre = 0;
+    unsigned long int nombre = 0;
     int indicePuissance = 0;
     int indice = 0;
     int caseRempli = 0;
