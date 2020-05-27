@@ -65,36 +65,32 @@ void remplirTableau(int taille, int tailleBase, char* a, unsigned int* nb) {
         caseRempli++;
     }
 }
+void dynamicChar(char*& nombre){
+    nombre = (char*)malloc(1);
+    int tmp;
+    int i = 0;
+    // Read characters until found an EOF or newline character. */
+    while((tmp = getchar()) != '\n' && tmp != EOF)
+    {
+        nombre[i++] = tmp;
+        nombre = (char*)realloc(nombre, i+1); // Add space for another character to be read.
+    }
+    nombre[i] = '\0';  // Null terminate the string
+}
 int main(int argc, const char * argv[]) {
     
     lentier a;
     lentier b;
     lentier s;
 
-    char* nombre1 = (char*)malloc(1);
+    char* nombre1 = NULL;
     printf("Entrez un nombre: "); // It can be of any length
-    int tmp;
-    int i = 0;
-    // Read characters until found an EOF or newline character. */
-    while((tmp = getchar()) != '\n' && tmp != EOF)
-    {
-        nombre1[i++] = tmp;
-        nombre1 = (char*)realloc(nombre1, i+1); // Add space for another character to be read.
-    }
-    nombre1[i] = '\0';  // Null terminate the string
+    dynamicChar(nombre1);
     printf("Vous avez écrit: %s\n", nombre1);
 
-    char* nombre2 = (char*)malloc(1);
+    char* nombre2 = NULL;
     printf("Entrez un nombre: "); // It can be of any length
-    tmp = NULL;
-    i = 0;
-    // Read characters until found an EOF or newline character. */
-    while((tmp = getchar()) != '\n' && tmp != EOF)
-    {
-        nombre2[i++] = tmp;
-        nombre2 = (char*)realloc(nombre2, i+1); // Add space for another character to be read.
-    }
-    nombre2[i] = '\0';  // Null terminate the string
+    dynamicChar(nombre2);
     printf("Vous avez écrit: %s\n", nombre2);
 
     a.size = tailleBase(getNumbersChar(nombre1), nombre1);
