@@ -43,7 +43,29 @@ int tailleBase(int taille, char *a) {
     }
     return nombreCase;
 }
-
+void checkCharLength(char* nombre1, char* nombre2){
+    int nb1 = getNumbersChar(nombre1);
+    int nb2 = getNumbersChar(nombre2);
+    if(nb1 > nb2){
+        nombre2 = (char*)realloc(nombre2, nb1+1); // Add space for another character to be read.
+        int diff = nb1 - nb2;
+        for(int i = 0; i <= nb1; i++){
+            nombre2[nb1 - i] = nombre2[nb2-i];
+        }
+        for(int i=0; i<diff; i++){
+            nombre2[i] = '0';
+        }
+    }else if(nb2 > nb1){
+        nombre1 = (char*)realloc(nombre1, nb2+1); // Add space for another character to be read.
+        int diff = nb2 - nb1;
+        for(int i = 0; i <= nb2; i++){
+            nombre1[nb2 - i] = nombre1[nb1-i];
+        }
+        for(int i=0; i<diff; i++){
+            nombre1[i] = '0';
+        }
+    }
+}
 void remplirTableau(int taille, int tailleBase, char* a, unsigned int* nb) {
     unsigned long int nombre = 0;
     int indicePuissance = 0;
@@ -93,6 +115,8 @@ int main(int argc, const char * argv[]) {
     dynamicChar(nombre2);
     printf("Vous avez écrit: %s\n", nombre2);
 
+    checkCharLength(nombre1, nombre2);
+    printf("Vous avez écrit: %s %s\n", nombre1, nombre2);
     a.size = tailleBase(getNumbersChar(nombre1), nombre1);
     a.p = new unsigned int[a.size]();
 
