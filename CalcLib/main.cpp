@@ -134,14 +134,14 @@ int main(int argc, const char * argv[]) {
     }
     
     if (a.size < b.size) {
-        s.size = b.size + 1;
+        s.size = b.size;
     }
     else {
-        s.size = a.size + 1;
+        s.size = a.size;
     }
     s.p = new unsigned int[s.size]();
 
-    unsigned int c = 0;
+   /* unsigned int c = 0;
     for (int i = s.size-2; i >= 0; i--) {
 
         s.p[i+1] = (a.p[i] + b.p[i] + c) % 4294967296;
@@ -159,6 +159,25 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < s.size; i++) {
         cout << s.p[i];
     }
+    */
+    int c = 0;
+    for (int i = s.size - 1; i >= 0; i--) {
+
+        s.p[i] = (a.p[i] - b.p[i] + c) % 4294967296;
+
+        if (a.p[i] + b.p[i] + c >= 0) {
+
+            c = 0;
+        }
+        else
+        {
+            c = -1;
+        }
+    }
+
+    for (int i = 0; i < s.size; i++) {
+        cout << s.p[i];
+    }
 
     delete[] a.p;
     delete[] b.p;
@@ -167,6 +186,6 @@ int main(int argc, const char * argv[]) {
     delete[] nombre2;
     return 0;
 }
-
+ 
 
 
