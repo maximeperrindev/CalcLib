@@ -94,6 +94,7 @@ void dynamicChar(char*& nombre) {
 
 lentier addition(lentier a, lentier b) {
 	unsigned int c = 0;
+	unsigned long long int temp = 0;
 	//Création du lentier s
 	lentier s;
 	if (a.size == b.size) {
@@ -111,16 +112,19 @@ lentier addition(lentier a, lentier b) {
 	for (int i = s.size - 2; i >= 0; i--) {
 
 		if (a.size > b.size && i >= b.size) {
-			s.p[s.size - 1 - i] = (a.p[i] + c) % 4294967296;
+			s.p[s.size - 1 - i] = a.p[i] + c;
 		}
 		else if (b.size > a.size&& i >= a.size) {
-			s.p[s.size - 1 - i] = (b.p[i] + c) % 4294967296;
+			s.p[s.size - 1 - i] = b.p[i] + c;
 		}
 		else {
-			s.p[s.size - 1 - i] = (a.p[i] + b.p[i] + c) % 4294967296;
+			s.p[s.size - 1 - i] = a.p[i] + b.p[i] + c;
 		}
-
-		if (a.p[i] + b.p[i] + c < 4294967296) {
+		
+		temp = a.p[i];
+		temp += b.p[i];
+		temp += c;
+		if (temp < 4294967296) {
 
 			c = 0;
 		}

@@ -64,7 +64,7 @@ int main(int argc, const char * argv[]) {
 			//Addition
 			s = addition(a, b);
 			
-			cout << nombre1, " + ", nombre2, " = ";
+			cout << nombre1 << " + " << nombre2 << " = ";
 			
 			fini = 1;
 
@@ -72,7 +72,7 @@ int main(int argc, const char * argv[]) {
 		else if (choix_user == 2) {
 			//Soustraction
 			s = soustraction(a, b);
-			cout << nombre1, " - ", nombre2, " = ";
+			cout << nombre1 << " - " << nombre2 << " = ";
 			fini = 1;
 		}
 		else {
@@ -81,58 +81,8 @@ int main(int argc, const char * argv[]) {
 	}
 	//Résultat opération
 	for (int i = 0; i < s.size; i++) {
-		cout << s.p[i];
+        cout << s.p[i] << endl;
 	}
-
-	//votre code de l'addition
-   /* unsigned int c = 0;
-    for (int i = s.size-2; i >= 0; i--) {
-
-        if (a.size > b.size && i >= b.size) {
-            s.p[s.size-1-i] = (a.p[i] + c) % 4294967296;
-        }
-        else if (b.size > a.size&& i >= a.size) {
-            s.p[s.size-1-i] = (b.p[i] + c) % 4294967296;
-        }
-        else {
-            s.p[s.size-1-i] = (a.p[i] + b.p[i] + c) % 4294967296;
-        }
-
-        if (a.p[i] + b.p[i] + c < 4294967296) {
-
-            c = 0;
-        }
-        else
-        {
-            c = 1;
-        }
-    }
-    s.p[0] = c;
-    for (int i = 0; i < s.size; i++) {
-        cout << s.p[i];
-    }
-    */
-	
-	//votre code de soustraction
-
-    /*int c = 0;
-    for (int i = s.size - 1; i >= 0; i--) {
-
-        s.p[i] = (a.p[i] - b.p[i] + c) % 4294967296;
-
-        if (a.p[i] + b.p[i] + c >= 0) {
-
-            c = 0;
-        }
-        else
-        {
-            c = -1;
-        }
-    } */
-
-    /*for (int i = 0; i < s.size; i++) {
-        cout << s.p[i];
-    } */
 
     delete[] a.p;
     delete[] b.p;
