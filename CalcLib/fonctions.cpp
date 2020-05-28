@@ -91,3 +91,75 @@ void dynamicChar(char*& nombre) {
 	}
 	nombre[i] = '\0';  // Null terminate the string
 }
+
+lentier addition(lentier a, lentier b) {
+	unsigned int c = 0;
+	//Création du lentier s
+	lentier s;
+	if (a.size == b.size) {
+		s.size = a.size+1;
+	}
+	else if (a.size > b.size) {
+		s.size = a.size + 1;
+	}
+	else {
+		s.size = b.size + 1;
+	}
+	s.p = new unsigned int[s.size]();
+
+	//Addition
+	for (int i = s.size - 2; i >= 0; i--) {
+
+		if (a.size > b.size && i >= b.size) {
+			s.p[s.size - 1 - i] = (a.p[i] + c) % 4294967296;
+		}
+		else if (b.size > a.size&& i >= a.size) {
+			s.p[s.size - 1 - i] = (b.p[i] + c) % 4294967296;
+		}
+		else {
+			s.p[s.size - 1 - i] = (a.p[i] + b.p[i] + c) % 4294967296;
+		}
+
+		if (a.p[i] + b.p[i] + c < 4294967296) {
+
+			c = 0;
+		}
+		else
+		{
+			c = 1;
+		}
+	}
+	s.p[0] = c;
+	
+	return s;
+}
+
+lentier soustraction(lentier a, lentier b) {
+	int c = 0;
+	//Création du lentier s
+	lentier s;
+	if (a.size == b.size) {
+		s.size = a.size;
+	}
+	else if (a.size > b.size) {
+		s.size = a.size;
+	}
+	else {
+		s.size = b.size;
+	}
+	s.p = new unsigned int[s.size]();
+	for (int i = s.size - 1; i >= 0; i--) {
+
+		s.p[i] = (a.p[i] - b.p[i] + c) % 4294967296;
+
+		if (a.p[i] + b.p[i] + c >= 0) {
+
+			c = 0;
+		}
+		else
+		{
+			c = -1;
+		}
+	}
+	return s;
+}

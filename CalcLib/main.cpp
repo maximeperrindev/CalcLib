@@ -34,9 +34,9 @@ int main(int argc, const char * argv[]) {
     a.p = new unsigned int[a.size]();
 
     remplirTableau(getNumbersChar(nombre1), a.size, nombre1, a.p);
-    for (int i = 0; i < a.size; i++) {
+    /*for (int i = 0; i < a.size; i++) {
         cout << a.p[i] << endl;
-    }
+    } */
 
     b.size = tailleBase(getNumbersChar(nombre2), nombre2);
     b.p = new unsigned int[b.size]();
@@ -54,6 +54,37 @@ int main(int argc, const char * argv[]) {
     }
     s.p = new unsigned int[s.size]();
 
+	int choix_user = 0;
+	int fini = 0;
+	cout << endl;
+	cout << "Voulez-vous additionner (entrez 1) ou les soutraire (entrez 2)?" << endl;
+	cin >> choix_user;
+	while (fini != 1) {
+		if (choix_user == 1) {
+			//Addition
+			s = addition(a, b);
+			
+			cout << nombre1, " + ", nombre2, " = ";
+			
+			fini = 1;
+
+		}
+		else if (choix_user == 2) {
+			//Soustraction
+			s = soustraction(a, b);
+			cout << nombre1, " - ", nombre2, " = ";
+			fini = 1;
+		}
+		else {
+			cout << "Erreur: vous devez entrer 1 ou 2" << endl;
+		}
+	}
+	//Résultat opération
+	for (int i = 0; i < s.size; i++) {
+		cout << s.p[i];
+	}
+
+	//votre code de l'addition
    /* unsigned int c = 0;
     for (int i = s.size-2; i >= 0; i--) {
 
@@ -81,7 +112,10 @@ int main(int argc, const char * argv[]) {
         cout << s.p[i];
     }
     */
-    int c = 0;
+	
+	//votre code de soustraction
+
+    /*int c = 0;
     for (int i = s.size - 1; i >= 0; i--) {
 
         s.p[i] = (a.p[i] - b.p[i] + c) % 4294967296;
@@ -94,11 +128,11 @@ int main(int argc, const char * argv[]) {
         {
             c = -1;
         }
-    }
+    } */
 
-    for (int i = 0; i < s.size; i++) {
+    /*for (int i = 0; i < s.size; i++) {
         cout << s.p[i];
-    }
+    } */
 
     delete[] a.p;
     delete[] b.p;

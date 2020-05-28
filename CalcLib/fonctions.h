@@ -15,3 +15,7 @@ void checkCharLength(char*, char*);
 void remplirTableau(int, int, char* , unsigned int* );
 
 void dynamicChar(char*&);
+
+lentier addition(lentier, lentier);
+
+lentier soustraction(lentier, lentier);
