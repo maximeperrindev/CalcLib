@@ -61,28 +61,20 @@ int main(int argc, const char * argv[]) {
     s.p = new unsigned int[s.size]();
 
 	int choix_user = 0;
-	int fini = 0;
 	cout << endl;
 	cout << "Voulez-vous additionner (entrez 1) ou les soutraire (entrez 2)?" << endl;
 	cin >> choix_user;
-	while (fini != 1) {
-		if (choix_user == 1) {
-			//Addition
-			s = addition(a, b);
-			
-			fini = 1;
-
-		}
-		else if (choix_user == 2) {
-			//Soustraction
+    switch(choix_user){
+        case 1:
+            s = addition(a, b);
+            break;
+        case 2:
             s = soustraction(a, b);
-
-			fini = 1;
-		}
-		else {
-			cout << "Erreur: vous devez entrer 1 ou 2" << endl;
-		}
-	}
+            break;
+        default:
+            cout << "Erreur: vous devez entrer 1 ou 2" << endl;
+            break;
+    }
 	//Résultat opération
 	for (int i = 0; i < s.size; i++) {
         cout << s.p[i] << endl;
