@@ -80,8 +80,6 @@ int main(int argc, const char * argv[]) {
         cout << s.p[i] << endl;
 	}
 
-    delete[] a.p;
-    delete[] b.p;
     delete[] s.p;
     return 0;
 }
