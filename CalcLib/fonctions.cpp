@@ -94,14 +94,11 @@ void dynamicChar(char*& nombre) {
 
 lentier addition(lentier a, lentier b) {
 	unsigned int c = 0;
-	unsigned long long int temp = 0;
+	unsigned long long temp = 0;
 	//Création du lentier s
 	lentier s;
-	if (a.size == b.size) {
+	if (a.size >= b.size) {
 		s.size = a.size+1;
-	}
-	else if (a.size > b.size) {
-		s.size = a.size + 1;
 	}
 	else {
 		s.size = b.size + 1;
@@ -109,21 +106,24 @@ lentier addition(lentier a, lentier b) {
 	s.p = new unsigned int[s.size]();
 
 	//Addition
-	for (int i = s.size - 2; i >= 0; i--) {
-
+	for (int i = 0; i < s.size-1; i++) {
+		temp = 0;
 		if (a.size > b.size && i >= b.size) {
-			s.p[s.size - 1 - i] = a.p[i] + c;
+			s.p[i] = a.p[i] + c;
+			temp = a.p[i];
+			temp += c;
 		}
-		else if (b.size > a.size&& i >= a.size) {
-			s.p[s.size - 1 - i] = b.p[i] + c;
+		else if (b.size > a.size && i >= a.size) {
+			s.p[i] = b.p[i] + c;
+			temp += b.p[i];
+			temp += c;
 		}
 		else {
-			s.p[s.size - 1 - i] = a.p[i] + b.p[i] + c;
+			s.p[i] = a.p[i] + b.p[i] + c;
+			temp = a.p[i];
+			temp += b.p[i];
+			temp += c;
 		}
-		
-		temp = a.p[i];
-		temp += b.p[i];
-		temp += c;
 		if (temp < 4294967296) {
 
 			c = 0;
@@ -133,30 +133,38 @@ lentier addition(lentier a, lentier b) {
 			c = 1;
 		}
 	}
-	s.p[0] = c;
+	s.p[s.size-1] = c;
 	
 	return s;
 }
 
 lentier soustraction(lentier a, lentier b) {
 	int c = 0;
+	long long temp = 0;
 	//Création du lentier s
 	lentier s;
-	if (a.size == b.size) {
-		s.size = a.size;
-	}
-	else if (a.size > b.size) {
+	if (a.size >= b.size) {
 		s.size = a.size;
 	}
 	else {
 		s.size = b.size;
 	}
 	s.p = new unsigned int[s.size]();
-	for (int i = s.size - 1; i >= 0; i--) {
+	for (int i = 0; i < s.size; i++) {
+		temp = 0;
+		if (a.size > b.size&& i >= b.size) {
+			s.p[i] = a.p[i] + c;
+			temp = a.p[i];
+			temp += c;
+		}
+		else {
+			s.p[i] = a.p[i] - b.p[i] + c;
+			temp = a.p[i];
+			temp -= b.p[i];
+			temp += c;
+		}
 
-		s.p[i] = (a.p[i] - b.p[i] + c) % 4294967296;
-
-		if (a.p[i] + b.p[i] + c >= 0) {
+		if (temp >= 0) {
 
 			c = 0;
 		}

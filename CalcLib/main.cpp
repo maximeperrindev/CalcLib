@@ -18,7 +18,7 @@ int main(int argc, const char * argv[]) {
     lentier b;
     lentier s;
 
-    char* nombre1 = NULL;
+   /*char* nombre1 = NULL;
     printf("Entrez un nombre: "); // It can be of any length
     dynamicChar(nombre1);
     printf("Vous avez écrit: %s\n", nombre1);
@@ -36,21 +36,27 @@ int main(int argc, const char * argv[]) {
     remplirTableau(getNumbersChar(nombre1), a.size, nombre1, a.p);
     /*for (int i = 0; i < a.size; i++) {
         cout << a.p[i] << endl;
-    } */
+    } 
 
     b.size = tailleBase(getNumbersChar(nombre2), nombre2);
-    b.p = new unsigned int[b.size]();
+    
 
-    remplirTableau(getNumbersChar(nombre2), b.size, nombre2, b.p);
+    //remplirTableau(getNumbersChar(nombre2), b.size, nombre2, b.p);
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
-    }
+    }*/
+    unsigned int tab1[3] = { 0, 0, 3 };
+    unsigned int tab2[3] = {0xFFFFFFFF, 0xFFFFFFFF, 2};
+    a.size = 3;
+    b.size = 3;
+    a.p = tab1;
+    b.p = tab2;
     
     if (a.size < b.size) {
-        s.size = b.size;
+        s.size = b.size + 1;
     }
     else {
-        s.size = a.size;
+        s.size = a.size + 1;
     }
     s.p = new unsigned int[s.size]();
 
@@ -64,15 +70,13 @@ int main(int argc, const char * argv[]) {
 			//Addition
 			s = addition(a, b);
 			
-			cout << nombre1 << " + " << nombre2 << " = ";
-			
 			fini = 1;
 
 		}
 		else if (choix_user == 2) {
 			//Soustraction
-			s = soustraction(a, b);
-			cout << nombre1 << " - " << nombre2 << " = ";
+            s = soustraction(a, b);
+
 			fini = 1;
 		}
 		else {
@@ -87,8 +91,6 @@ int main(int argc, const char * argv[]) {
     delete[] a.p;
     delete[] b.p;
     delete[] s.p;
-    delete[] nombre1;
-    delete[] nombre2;
     return 0;
 }
  
