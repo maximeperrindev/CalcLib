@@ -111,21 +111,18 @@ lentier addition(lentier a, lentier b) {
 		if (a.size > b.size && i >= b.size) {
 			s.p[i] = a.p[i] + c;
 			temp = a.p[i];
-			temp += c;
 		}
 		else if (b.size > a.size && i >= a.size) {
 			s.p[i] = b.p[i] + c;
-			temp += b.p[i];
-			temp += c;
+			temp = b.p[i];
 		}
 		else {
 			s.p[i] = a.p[i] + b.p[i] + c;
 			temp = a.p[i];
 			temp += b.p[i];
-			temp += c;
 		}
+		temp += c;
 		if (temp < 4294967296) {
-
 			c = 0;
 		}
 		else
@@ -154,16 +151,14 @@ lentier soustraction(lentier a, lentier b) {
 		temp = 0;
 		if (a.size > b.size&& i >= b.size) {
 			s.p[i] = a.p[i] + c;
-			temp = a.p[i];
-			temp += c;
+			temp = a.p[i];		
 		}
 		else {
 			s.p[i] = a.p[i] - b.p[i] + c;
 			temp = a.p[i];
-			temp -= b.p[i];
-			temp += c;
+			temp -= b.p[i];		
 		}
-
+		temp += c;
 		if (temp >= 0) {
 
 			c = 0;

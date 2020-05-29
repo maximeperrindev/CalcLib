@@ -62,7 +62,7 @@ int main(int argc, const char * argv[]) {
 
 	int choix_user = 0;
 	cout << endl;
-	cout << "Voulez-vous additionner (entrez 1) ou les soutraire (entrez 2)?" << endl;
+	start:cout << "Voulez-vous additionner (entrez 1) ou les soutraire (entrez 2)?" << endl;
 	cin >> choix_user;
     switch(choix_user){
         case 1:
@@ -73,7 +73,7 @@ int main(int argc, const char * argv[]) {
             break;
         default:
             cout << "Erreur: vous devez entrer 1 ou 2" << endl;
-            break;
+            goto start;
     }
 	//Résultat opération
 	for (int i = 0; i < s.size; i++) {
