@@ -45,8 +45,8 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    unsigned int tab1[1] = { 2};
-    unsigned int tab2[1] = { 2};
+    unsigned int tab1[1] = {1000000};
+    unsigned int tab2[1] = {1000000};
     a.size = 1;
     b.size = 1;
     a.p = tab1;

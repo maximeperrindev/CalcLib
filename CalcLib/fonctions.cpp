@@ -168,7 +168,7 @@ lentier multiplication(lentier a, lentier b) {
 	lentier s;
 	long long temp = 0;
 	int c = 0;
-	s.size = a.size + b.size - 1;
+	s.size = a.size + b.size;
 	s.p = new unsigned int[s.size]();
 	for (int i = 0; i < a.size; i++) {
 		c = 0;
