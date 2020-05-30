@@ -117,7 +117,7 @@ lentier addition(lentier a, lentier b) {
             s.p[i] = temp & 0xFFFFFFFF;
         }
     }
-    if(b.size > a.size){
+    else if(b.size > a.size){
         for(int i = 0; i < a.size && i < b.size; i++){
             temp = (unsigned long long)b.p[i] + c;
             c = temp >> 32;
