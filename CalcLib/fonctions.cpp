@@ -152,14 +152,6 @@ lentier soustraction(lentier a, lentier b) {
             c = temp >> 63;
             s.p[i] = temp & 0xFFFFFFFF;
         }
-        if (b.size > a.size) {
-            for (int i = a.size; i < b.size; i++)
-            {
-                temp = (unsigned long long)a.p[i] + c;
-                c = temp >> 63;
-                s.p[i] = temp & 0xFFFFFFFF;
-            }
-        }
     }
     return s;
 }
