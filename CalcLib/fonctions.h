@@ -19,3 +19,5 @@ void dynamicChar(char*&);
 lentier addition(lentier, lentier);
 
 lentier soustraction(lentier, lentier);
+
+lentier multiplication(lentier, lentier);
