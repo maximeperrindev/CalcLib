@@ -45,10 +45,10 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    unsigned int tab1[3] = { 4294967295, 4294967295, 4294967295};
-    unsigned int tab2[3] = {1,0,0};
-    a.size = 3;
-    b.size = 3;
+    unsigned int tab1[1] = {1000000};
+    unsigned int tab2[1] = {1000000};
+    a.size = 1;
+    b.size = 1;
     a.p = tab1;
     b.p = tab2;
     
@@ -62,7 +62,7 @@ int main(int argc, const char * argv[]) {
 
 	int choix_user = 0;
 	cout << endl;
-	start:cout << "Voulez-vous additionner (entrez 1) ou les soutraire (entrez 2)?" << endl;
+	start:cout << "Voulez-vous additionner (entrez 1), les soutraire (entrez 2) ou une multiplication (entrez 3)?" << endl;
 	cin >> choix_user;
     switch(choix_user){
         case 1:
@@ -70,6 +70,9 @@ int main(int argc, const char * argv[]) {
             break;
         case 2:
             s = soustraction(a, b);
+            break;
+        case 3:
+            s = multiplication(a, b);
             break;
         default:
             cout << "Erreur: vous devez entrer 1 ou 2" << endl;

@@ -143,23 +143,42 @@ lentier soustraction(lentier a, lentier b) {
     for (int i = 0; i < a.size && i < b.size;i++) {
         temp = a.p[i] - (unsigned long long)b.p[i] + c;
         c = temp >> 63;
-        s.p[i] = temp && 0xFFFFFFFF;
+        s.p[i] = temp & 0xFFFFFFFF;
         }
     if (a.size > b.size) {
         for (int i = b.size; i < a.size;i++)
         {
             temp = (unsigned long long)a.p[i] + c;
             c = temp >> 63;
-            s.p[i] = temp && 0xFFFFFFFF;
+            s.p[i] = temp & 0xFFFFFFFF;
         }
         if (b.size > a.size) {
             for (int i = a.size; i < b.size; i++)
             {
                 temp = (unsigned long long)a.p[i] + c;
                 c = temp >> 63;
-                s.p[i] = temp && 0xFFFFFFFF;
+                s.p[i] = temp & 0xFFFFFFFF;
             }
         }
     }
     return s;
+}
+
+lentier multiplication(lentier a, lentier b) {
+	lentier s;
+	long long temp = 0;
+	int c = 0;
+	s.size = a.size + b.size;
+	s.p = new unsigned int[s.size]();
+	for (int i = 0; i < a.size; i++) {
+		c = 0;
+		for (int j = 0; j < b.size; j++) {
+			temp = s.p[i + j] + (long long)a.p[i] * b.p[j] + c;
+			s.p[i + j] = temp & 0xFFFFFFFF;
+			c = temp >> 32;
+		}
+		s.p[i + b.size] = c;
+	}
+
+	return s;
 }
