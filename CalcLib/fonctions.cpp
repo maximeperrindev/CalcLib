@@ -129,37 +129,37 @@ lentier addition(lentier a, lentier b) {
 }
 
 lentier soustraction(lentier a, lentier b) {
-	int c = 0;
-	long long temp = 0;
-	//Création du lentier s
-	lentier s;
-	if (a.size >= b.size) {
-		s.size = a.size;
-	}
-	else {
-		s.size = b.size;
-	}
-	s.p = new unsigned int[s.size]();
-	for (int i = 0; i < s.size; i++) {
-		temp = 0;
-		if (a.size > b.size&& i >= b.size) {
-			s.p[i] = a.p[i] + c;
-			temp = a.p[i];		
-		}
-		else {
-			s.p[i] = a.p[i] - b.p[i] + c;
-			temp = a.p[i];
-			temp -= b.p[i];		
-		}
-		temp += c;
-		if (temp >= 0) {
-
-			c = 0;
-		}
-		else
-		{
-			c = -1;
-		}
-	}
-	return s;
+    int c = 0;
+    long long temp = 0;
+    //CrŽation du lentier s
+    lentier s;
+    if (a.size >= b.size) {
+        s.size = a.size;
+    }
+    else {
+        s.size = b.size;
+    }
+    s.p = new unsigned int[s.size]();
+    for (int i = 0; i < a.size && i < b.size;i++) {
+        temp = a.p[i] - (unsigned long long)b.p[i] + c;
+        c = temp >> 63;
+        s.p[i] = temp && 0xFFFFFFFF;
+        }
+    if (a.size > b.size) {
+        for (int i = b.size; i < a.size;i++)
+        {
+            temp = (unsigned long long)a.p[i] + c;
+            c = temp >> 63;
+            s.p[i] = temp && 0xFFFFFFFF;
+        }
+        if (b.size > a.size) {
+            for (int i = a.size; i < b.size; i++)
+            {
+                temp = (unsigned long long)a.p[i] + c;
+                c = temp >> 63;
+                s.p[i] = temp && 0xFFFFFFFF;
+            }
+        }
+    }
+    return s;
 }
