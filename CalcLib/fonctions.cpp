@@ -83,13 +83,13 @@ void dynamicChar(char*& nombre) {
 	nombre = (char*)malloc(1);
 	int tmp;
 	int i = 0;
-	// Read characters until found an EOF or newline character. */
+	// Lecture de la chaîne de caractère jusqu'à rencontrer le caractère de fin de chaîne */
 	while ((tmp = getchar()) != '\n' && tmp != EOF)
 	{
 		nombre[i++] = tmp;
-		nombre = (char*)realloc(nombre, i + 1); // Add space for another character to be read.
+		nombre = (char*)realloc(nombre, i + 1); // Allocation d'un espace mémoire supllémentaire pour le caractère à venir
 	}
-	nombre[i] = '\0';  // Null terminate the string
+	nombre[i] = '\0';  // On ajoute le caractère de fin de chaîne
 }
 
 lentier addition(lentier a, lentier b) {
