@@ -93,7 +93,7 @@ void dynamicChar(char*& nombre) {
 }
 
 lentier addition(lentier a, lentier b) {
-	unsigned int c = 0;
+	bool c = 0;
 	unsigned long long temp = 0;
 	//Création du lentier s
 	lentier s;
@@ -104,34 +104,27 @@ lentier addition(lentier a, lentier b) {
 		s.size = b.size + 1;
 	}
 	s.p = new unsigned int[s.size]();
-
-	//Addition
-	for (int i = 0; i < s.size-1; i++) {
-		temp = 0;
-		if (a.size > b.size && i >= b.size) {
-			s.p[i] = a.p[i] + c;
-			temp = a.p[i];
-		}
-		else if (b.size > a.size && i >= a.size) {
-			s.p[i] = b.p[i] + c;
-			temp = b.p[i];
-		}
-		else {
-			s.p[i] = a.p[i] + b.p[i] + c;
-			temp = a.p[i];
-			temp += b.p[i];
-		}
-		temp += c;
-		if (temp < 4294967296) {
-			c = 0;
-		}
-		else
-		{
-			c = 1;
-		}
-	}
-	s.p[s.size-1] = c;
-	
+    
+    for(int i = 0; i < a.size && i < b.size; i++){
+        temp = (unsigned long long)a.p[i] + b.p[i] + c;
+        c = temp >> 32;
+        s.p[i] = temp & 0xFFFFFFFF;
+    }
+    if(a.size > b.size){
+        for(int i = 0; i < b.size && i < a.size; i++){
+            temp = (unsigned long long)a.p[i] + c;
+            c = temp >> 32;
+            s.p[i] = temp & 0xFFFFFFFF;
+        }
+    }
+    if(b.size > a.size){
+        for(int i = 0; i < a.size && i < b.size; i++){
+            temp = (unsigned long long)b.p[i] + c;
+            c = temp >> 32;
+            s.p[i] = temp & 0xFFFFFFFF;
+        }
+    }
+    s.p[s.size-1] = c;
 	return s;
 }
 

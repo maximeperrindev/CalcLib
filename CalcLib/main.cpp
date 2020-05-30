@@ -45,10 +45,10 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    unsigned int tab1[3] = { 0, 0, 3 };
-    unsigned int tab2[3] = {0xFFFFFFFF, 0xFFFFFFFF, 2};
-    a.size = 3;
-    b.size = 3;
+    unsigned int tab1[2] = { 0xFFFFFFFF, 0xFFFFFFFF};
+    unsigned int tab2[1] = {1};
+    a.size = 2;
+    b.size = 1;
     a.p = tab1;
     b.p = tab2;
     
