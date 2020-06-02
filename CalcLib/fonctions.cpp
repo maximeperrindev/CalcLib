@@ -230,9 +230,16 @@ lentier division(lentier a, lentier b) {
 	q.p = new unsigned int[q.size];
 	r.size = b.size - 1;
 
+	//0
+	lentier nul;
+	nul.size = 1;
+	nul.p = new unsigned int[nul.size];
+	nul.p[0] = 0;
+
 
 	if (a.size < b.size) {
 		//impossible
+		cout << "a est inférieur à b" << endl;
 	}
 	else {
 
@@ -296,9 +303,33 @@ lentier division(lentier a, lentier b) {
 
 			}
 
+			//c)
 
+			temp1.p[2] = 0;
+			temp1.p[1] = 0;
+			temp1.p[0] = q.p[i-b.size];
+
+			base2.p[1] = 1;
+			base2.p[0] = 0;
+			for (unsigned int k = 1; k < i - b.size; k++) {
+
+				base2 = multiplication(base2, base1);
+			}
+
+
+			temp2 = multiplication(b, base2);
+			a = soustraction(a, multiplication(temp1, temp2));
+
+			//d)
+			
+			if (estSuperieur(a, nul) == 1) {
+				a = addition(a, base2);
+				q.p[i - b.size]--;
+			}
 
 		}
+		r = addition(a, nul); //pour faire r=a;
+		return r;
 	}
 
 }
