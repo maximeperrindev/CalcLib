@@ -21,3 +21,5 @@ lentier addition(lentier, lentier);
 lentier soustraction(lentier, lentier);
 
 lentier multiplication(lentier, lentier);
+
+bool estSuperieur(lentier, lentier);

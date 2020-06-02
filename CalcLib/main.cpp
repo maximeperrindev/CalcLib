@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <math.h>
+#include <time.h>
+
 using namespace std;
 
 #include "fonctions.h"
@@ -17,6 +19,8 @@ int main(int argc, const char * argv[]) {
     lentier a;
     lentier b;
     lentier s;
+
+    float temp;
 
    /*char* nombre1 = NULL;
     printf("Entrez un nombre: "); // It can be of any length
@@ -45,10 +49,10 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    unsigned int tab1[2] = {123456789,123456789};
-    unsigned int tab2[1] = {1};
+    unsigned int tab1[1] = {123456789};
+    unsigned int tab2[1] = {100000000};
 
-    a.size = 2;
+    a.size = 1;
     b.size = 1;
 
     a.p = tab1;
@@ -79,6 +83,7 @@ int main(int argc, const char * argv[]) {
             cout << "Erreur: vous devez entrer 1 ou 2" << endl;
             goto start;
     }
+    
 	//Résultat opération
 	for (int i = 0; i < s.size; i++) {
         cout << s.p[i] << endl;

@@ -92,26 +92,55 @@ void dynamicChar(char*& nombre) {
 	nombre[i] = '\0';  // On ajoute le caractre de fin de cha”ne
 }
 
+bool estSuperieur(lentier a, lentier b) //Renvoie true si a >=b, false sinon
+{
+	if (a.size > b.size) {
+		return true;
+	}
+	else if (b.size < a.size) {
+		return false;
+	}
+	else {
+		for (int i = 0; i < a.size-1; i++) {
+			if (a.p[i] > b.p[i]) {
+				return true;
+			}
+			else if (b.p[i] > a.p[i]) {
+				return false;
+			}
+		}
+		if (a.p[a.size - 1] < b.p[a.size - 1]) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+}
+
 lentier addition(lentier a, lentier b) {
 	bool c = 0;
 	unsigned long long temp = 0;
+	int tailleMax = 0;
 	//Création du lentier s
 	lentier s;
 	if (a.size >= b.size) {
 		s.size = a.size+1;
+		tailleMax = b.size;
 	}
 	else {
 		s.size = b.size + 1;
+		tailleMax = a.size;
 	}
 	s.p = new unsigned int[s.size]();
     
-    for(int i = 0; i < a.size && i < b.size; i++){
+    for(int i = 0; i < tailleMax; i++){
         temp = (unsigned long long)a.p[i] + b.p[i] + c;
         c = temp >> 32;
         s.p[i] = temp & 0xFFFFFFFF;
     }
     if(a.size > b.size){
-        for(int i = b.size;i < a.size; i++){
+        for(int i = b.size; i < a.size; i++){
             temp = (unsigned long long)a.p[i] + c;
             c = temp >> 32;
             s.p[i] = temp & 0xFFFFFFFF;
@@ -131,28 +160,47 @@ lentier addition(lentier a, lentier b) {
 lentier soustraction(lentier a, lentier b) {
     int c = 0;
     long long temp = 0;
-    //CrŽation du lentier s
-    lentier s;
-    if (a.size >= b.size) {
-        s.size = a.size;
-    }
-    else {
-        s.size = b.size;
-    }
-    s.p = new unsigned int[s.size]();
-    for (int i = 0; i < a.size && i < b.size;i++) {
-        temp = a.p[i] - (unsigned long long)b.p[i] + c;
-        c = temp >> 63;
-        s.p[i] = temp & 0xFFFFFFFF;
-        }
-    if (a.size > b.size) {
-        for (int i = b.size; i < a.size;i++)
-        {
-            temp = (unsigned long long)a.p[i] + c;
-            c = temp >> 63;
-            s.p[i] = temp & 0xFFFFFFFF;
-        }
-    }
+	int tailleMax = 0;
+	lentier s;	
+
+	if (estSuperieur(a, b) == 1) {
+		s.size = a.size;
+		tailleMax = b.size;
+		s.p = new unsigned int[s.size]();
+
+		for (int i = 0; i < a.size && i < b.size; i++) {
+			temp = a.p[i] - (unsigned long long)b.p[i] + c;
+			c = temp >> 63;
+			s.p[i] = temp & 0xFFFFFFFF;
+		}
+		if (a.size > b.size) {
+			for (int i = b.size; i < a.size; i++)
+			{
+				temp = (unsigned long long)a.p[i] + c;
+				c = temp >> 63;
+				s.p[i] = temp & 0xFFFFFFFF;
+			}
+		}
+	}
+	else {
+		s.size = b.size;
+		tailleMax = a.size;
+		s.p = new unsigned int[s.size]();
+		for (int i = 0; i < tailleMax; i++) {
+			temp = b.p[i] - (unsigned long long)a.p[i] + c;
+			c = temp >> 63;
+			s.p[i] = temp & 0xFFFFFFFF;
+		}
+		if (b.size > a.size) {
+			for (int i = a.size; i < b.size; i++)
+			{
+				temp = (unsigned long long)b.p[i] + c;
+				c = temp >> 63;
+				s.p[i] = temp & 0xFFFFFFFF;
+			}
+		}
+	}
+   
     return s;
 }
 
