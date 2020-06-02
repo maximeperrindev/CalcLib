@@ -222,3 +222,83 @@ lentier multiplication(lentier a, lentier b) {
 
 	return s;
 }
+lentier division(lentier a, lentier b) {
+	lentier q;
+	lentier r;
+
+	q.size = a.size - b.size;
+	q.p = new unsigned int[q.size];
+	r.size = b.size - 1;
+
+
+	if (a.size < b.size) {
+		//impossible
+	}
+	else {
+
+		for (unsigned int j = 0; j <= a.size - b.size; j++) {
+			q.p[j] = 0;
+		}
+		lentier base1;
+		lentier base2;
+		base2.size = a.size - b.size + 1;
+		base2.p = new unsigned int[base2.size];
+
+		base1.size = 2;
+		base1.p = new unsigned int[base1.size];
+		base1.p[1] = 1;
+		base1.p[0] = 0;
+
+		base2.p[1] = 1;
+		base2.p[0] = 0;
+
+		for (unsigned int i = 1; i < a.size - b.size; i++) {
+
+			base2 = multiplication(base2, base1);
+		}
+
+		base2 = multiplication(base2, b);
+
+		while (estSuperieur(a, base2) >= 0) {
+
+			q.p[a.size - b.size]++;
+			a = soustraction(a, base2);
+		}
+
+		
+		for (unsigned int i = a.size - 1; i <= b.size; i++) {
+
+			if (a.p[i] == b.p[b.size - 1]) {
+				q.p[i - b.size] = 0xFFFFFFFF;
+			}
+			else {
+				q.p[i - b.size] = ((a.p[i]<<32) + a.p[i - 1]) / b.p[b.size - 1];
+			}
+
+			lentier temp1;
+			lentier temp2;
+			temp1.size = 3;
+			temp2.size = 3;
+			
+			temp1.p = new unsigned int[temp1.size];
+			temp2.p = new unsigned int[temp2.size];
+
+			temp1.p[2] = (q.p[i - b.size] * b.p[b.size - 1]) >> 32;
+			temp1.p[1] = (((unsigned long long)q.p[i - b.size] * b.p[b.size - 1])& 0xFFFFFFFF + ((unsigned long long)
+				q.p[i-b.size]*b.p[b.size-2])) >> 32;
+			temp1.p[0] = (q.p[i - b.size] * b.p[b.size - 2]) & 0xFFFFFFFF;
+			temp2.p[2] = a.p[i];
+			temp2.p[1] = a.p[i - 1];
+
+			while(estSuperieur(temp1,temp2)>=0)
+			{
+				q.p[i - b.size]--;
+
+			}
+
+
+
+		}
+	}
+
+}
