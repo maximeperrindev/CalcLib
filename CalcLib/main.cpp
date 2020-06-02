@@ -45,10 +45,12 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    unsigned int tab1[1] = {1000000};
+    unsigned int tab1[2] = {123456789,123456789};
     unsigned int tab2[1] = {1000000};
-    a.size = 1;
+
+    a.size = 2;
     b.size = 1;
+
     a.p = tab1;
     b.p = tab2;
     
@@ -58,7 +60,6 @@ int main(int argc, const char * argv[]) {
     else {
         s.size = a.size + 1;
     }
-    s.p = new unsigned int[s.size]();
 
 	int choix_user = 0;
 	cout << endl;

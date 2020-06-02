@@ -111,14 +111,14 @@ lentier addition(lentier a, lentier b) {
         s.p[i] = temp & 0xFFFFFFFF;
     }
     if(a.size > b.size){
-        for(int i = 0; i < b.size && i < a.size; i++){
+        for(int i = 0;i < a.size; i++){
             temp = (unsigned long long)a.p[i] + c;
             c = temp >> 32;
             s.p[i] = temp & 0xFFFFFFFF;
         }
     }
     else if(b.size > a.size){
-        for(int i = 0; i < a.size && i < b.size; i++){
+        for(int i = 0; i < b.size; i++){
             temp = (unsigned long long)b.p[i] + c;
             c = temp >> 32;
             s.p[i] = temp & 0xFFFFFFFF;
@@ -165,7 +165,7 @@ lentier multiplication(lentier a, lentier b) {
 	for (int i = 0; i < a.size; i++) {
 		c = 0;
 		for (int j = 0; j < b.size; j++) {
-			temp = s.p[i + j] + (long long)a.p[i] * b.p[j] + c;
+			temp = s.p[i + j] + (unsigned long long)a.p[i] * b.p[j] + c;
 			s.p[i + j] = temp & 0xFFFFFFFF;
 			c = temp >> 32;
 		}
