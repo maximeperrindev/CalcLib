@@ -20,7 +20,8 @@ int main(int argc, const char * argv[]) {
     lentier b;
     lentier s;
 
-    float temp;
+    char* nombre1 = new char[100];
+    char* nombre2 = new char[100];
 
    /*char* nombre1 = NULL;
     printf("Entrez un nombre: "); // It can be of any length
@@ -49,25 +50,23 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    unsigned int tab1[1] = {123456789};
-    unsigned int tab2[1] = {100000000};
 
-    a.size = 1;
-    b.size = 1;
+    cin >> nombre1;
+    cin >> nombre2;
 
-    a.p = tab1;
-    b.p = tab2;
-    
-    if (a.size < b.size) {
-        s.size = b.size + 1;
-    }
-    else {
-        s.size = a.size + 1;
+    a.size = floor((getNumbersChar(nombre1) * log(10)) / (32 * log(2))) + 1;
+    b.size = floor((getNumbersChar(nombre2) * log(10)) / (32 * log(2))) + 1;
+
+    a = repartitionTab(nombre1, a.size);
+    b = repartitionTab(nombre2, b.size);
+
+    for (int i = 0; i < a.size; i++) {
+        cout << a.p[i] << endl;
     }
 
 	int choix_user = 0;
 	cout << endl;
-	start:cout << "Voulez-vous additionner (entrez 1), les soutraire (entrez 2) ou une multiplication (entrez 3)?" << endl;
+	start:cout << "Voulez-vous additionner (entrez 1), les soutraire (entrez 2), une multiplication (entrez 3) ou une division (entrez 4)?" << endl;
 	cin >> choix_user;
     switch(choix_user){
         case 1:
@@ -78,6 +77,9 @@ int main(int argc, const char * argv[]) {
             break;
         case 3:
             s = multiplication(a, b);
+            break;
+        case 4: 
+            s = division(a, b);
             break;
         default:
             cout << "Erreur: vous devez entrer 1 ou 2" << endl;

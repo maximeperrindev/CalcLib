@@ -22,4 +22,8 @@ lentier soustraction(lentier, lentier);
 
 lentier multiplication(lentier, lentier);
 
-bool estSuperieur(lentier, lentier);
+char estSuperieur(lentier, lentier);
+
+lentier division(lentier a, lentier b);
+
+lentier repartitionTab(char*, int);
