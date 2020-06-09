@@ -20,8 +20,8 @@ int main(int argc, const char * argv[]) {
     lentier b;
     lentier s;
 
-    char* nombre1 = new char[100];
-    char* nombre2 = new char[100];
+   /* char* nombre1 = new char[100];
+    char* nombre2 = new char[100]; */
 
    /*char* nombre1 = NULL;
     printf("Entrez un nombre: "); // It can be of any length
@@ -50,7 +50,7 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    a.p = new unsigned int[5];
+    /*a.p = new unsigned int[5];
     b.p = new unsigned int[3];
 
     b.size = 3;
@@ -109,11 +109,31 @@ int main(int argc, const char * argv[]) {
             cout << "Erreur: vous devez entrer 1 ou 2" << endl;
             goto start;
     }
-    
+    */
+	a.size = 5;
+	b.size = 3;
+	a.p = new unsigned int[a.size]();
+	b.p = new unsigned int[b.size]();
+
+	a.p[4] = 1;
+	a.p[3] = 2;
+	a.p[2] = 8;
+
+	b.p[2] = 2;
+	b.p[1] = 3;
+	b.p[0] = 5;
+
+	s = division(a, b);
+
+
 	//Résultat opération
-	for (int i = 0; i < s.size; i++) {
-        cout << s.p[i] << endl;
+	cout << "Reste: ";
+	for (int i = s.size; i >0 ; i--) {
+        cout << s.p[i-1] << " ";
 	}
+	cout << endl;
+
+
 
     delete[] s.p;
     return 0;

@@ -145,7 +145,7 @@ char estSuperieur(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 		return -1;
 	}
 	else {
-		for (int i = 0; i < a.size; i++) {
+		for (int i = a.size-1; i >=0; i--) {
 			if (a.p[i] > b.p[i]) {
 				return 1;
 			}
@@ -277,6 +277,7 @@ lentier division(lentier a, lentier b) {
 	q.size = a.size - b.size + 1;
 	q.p = new unsigned int[q.size]();
 
+
 	exp = a.size - b.size;
 
 	h.size = exp + 1;
@@ -287,26 +288,44 @@ lentier division(lentier a, lentier b) {
 
 	lentier multi;
 	multi = multiplication(b, h); //Br^n-t;
+	lAdjust(multi);
+	for (unsigned int k = multi.size; k > 0; k--) {
+		cout << multi.p[k - 1] << " ";
+	} cout << endl;
 	lentier atemp;
 
-	while (estSuperieur(a, b) >= 0) {
-
+	while (estSuperieur(a, multi) >= 0) {
+		cout << "a: ";
+		for (unsigned int k = a.size; k >0; k--) {
+			cout << a.p[k-1] ;
+		} cout << endl;
+		cout << "b: ";
+		for (unsigned int k = b.size; k > 0; k--) {
+			cout << b.p[k-1];
+		} cout << endl;
+		
 		q.p[a.size - b.size]++;
 
-		atemp = soustraction(a, h);
+		atemp = soustraction(a, multi);
+		for (unsigned int k = atemp.size; k > 0; k--) {
+			cout << atemp.p[k - 1] << " ";
+		} cout << endl;
 
 		delete[] a.p;
-		
+
 		a = addition(atemp, nul);
 
 		lAdjust(a);
-
-		delete[] atemp.p;
+		for (unsigned int k = a.size; k > 0; k--) {
+			cout << a.p[k - 1] << " ";
+		} cout << endl;
+		delete[]atemp.p;
 	}
+	atemp = addition(a, nul);//permet de retourner a si on rentre pas dans le for suivant
+	lAdjust(atemp);
+//ça marche jusque là
 
-	delete[] h.p;
-
-	for (unsigned int i = a.size - 1; i <= b.size; i++) {
+	for (unsigned int i = a.size - 1; i >= b.size; i--) {
 		//a
 		if (a.p[i] == b.p[b.size - 1]) {
 			q.p[i - b.size] = 4294967295;
@@ -315,12 +334,13 @@ lentier division(lentier a, lentier b) {
 
 			q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
 		}
-		
+
+		delete[] h.p;
 		//b
 
-		while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1]) > a.p[i] * pow(2, 32) || (
-			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1]) == a.p[i] * pow(2, 32) &&
-			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2]) > (a.p[i - 1] * pow(2, 32) + a.p[i - 2]))) {
+		while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
+			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
+			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
 
 			q.p[i - b.size]--;
 		}
@@ -353,12 +373,18 @@ lentier division(lentier a, lentier b) {
 			q.p[i - b.size]--;
 
 		}
+
+		
+
 		delete[] atemp.p;
 		delete[] ctemp.p;
 		delete[] h.p;
+		atemp = addition(Atemp, nul);
+		lAdjust(atemp);
+		delete[] Atemp.p;
 	}
-
-	return Atemp;
+	
+	return atemp;
 }
 
 void lAdjust(lentier& a) {
@@ -366,8 +392,9 @@ void lAdjust(lentier& a) {
 	while (a.p[i] == 0) {
 		i--;
 	}
-	a.size = a.size - i;
-	for (int y = a.size - 1; y > i; y--) {
+	
+	/*for (int y = a.size - 1; y > i; y--) {
 		free(&a.p[y]);
-	}
+	}*/
+	a.size = i+1;
 }
