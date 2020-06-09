@@ -27,3 +27,5 @@ char estSuperieur(lentier, lentier);
 lentier division(lentier a, lentier b);
 
 lentier repartitionTab(char*, int);
+
+void lAdjust(lentier& a);

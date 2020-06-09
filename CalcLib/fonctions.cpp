@@ -1,4 +1,4 @@
-#include <iostream>
+Ôªø#include <iostream>
 #include <math.h>
 
 using namespace std;
@@ -86,24 +86,53 @@ void dynamicChar(char*& nombre) {
 	while ((tmp = getchar()) != '\n' && tmp != EOF)
 	{
 		nombre[i++] = tmp;
-		nombre = (char*)realloc(nombre, i + 1); // Allocation d'un espace mémoire supllémentaire pour le caractère à venir
+		nombre = (char*)realloc(nombre, i + 1); // Allocation d'un espace m≈Ωmoire supll≈Ωmentaire pour le caract¬ère ÀÜ venir
 	}
-	nombre[i] = '\0';  // On ajoute le caractère de fin de chaîne
+	nombre[i] = '\0';  // On ajoute le caract¬ère de fin de cha‚Äùne
 }
 */
 
 lentier repartitionTab(char* a, int tailleBase) {
 	lentier s;
+	lentier temp;
+	lentier temp2;
+	lentier base10;
+	float multi = 0;
+	unsigned long long retenue = 0;
 	int taille = getNumbersChar(a);
 
 	s.size = tailleBase;
+	temp.size = s.size;
+	base10.size = s.size;
+	temp.p = new unsigned int[tailleBase]();
+	base10.p = new unsigned int[tailleBase]();
 	s.p = new unsigned int[tailleBase]();
 
 	for (int i = 0; i < tailleBase; i++) {
 		for (int y = i * 9; y < taille && y < (i + 1) * 9; y++) {
-			s.p[i] += (int)(a[taille - y - 1] - 48) * pow(10, y - i * 9);
+			base10.p[i] += (int)(a[taille - y - 1] - 48) * pow(10, y - i * 9);
 		}
+		
 	}
+	for (int i = tailleBase - 1; i > 0; i--) {
+		s.p[i] += (base10.p[base10.size-1] * pow(10, 9 * i)) / pow(2, 32 * i);
+		base10.p[base10.size-1] += fmod(fmod(base10.p[base10.size - 1] * pow(10, 9 * i), pow(2, 32 * i)), pow(10,9*(i-1)));
+		cout << "retenue" << retenue << endl;
+		base10.p[base10.size-1] = fmod(base10.p[base10.size - 1] * pow(10, 9 * i), pow(2, 32 * i)) / pow(10, 9 * (i - 1));
+		cout << s.p[0] << " = s" << endl;
+		cout << "base10" << base10.p[base10.size-1] << endl;
+	}
+	retenue = fmod(s.p[2] * pow(2, 64) + s.p[1] * pow(2, 32), 1000000000);
+	
+	cout << "retenue" << retenue << endl;
+	s.p[0] = base10.p[base10.size - 1] + retenue;
+	/*s.p[i] = round(temp.p[i] * pow(10, 9 * i) / pow(2, 32 * i)) + retenue;
+	retenue = 0;
+	for (int y = tailleBase - 1; y >= i; y--) {
+		retenue += ceil((temp.p[y] * pow(10, 9 * y) - s.p[y] * pow(2, 32 * y)) / pow(2, 32 * (i - 1)));
+	}
+	cout << "retenue = " << retenue << endl;
+	s.p[0] = retenue + temp.p[0];*/
 	return s;
 }
 
@@ -112,7 +141,7 @@ char estSuperieur(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 	if (a.size > b.size) {
 		return 1;
 	}
-	else if (b.size < a.size) {
+	else if (b.size > a.size) {
 		return -1;
 	}
 	else {
@@ -132,7 +161,7 @@ lentier addition(lentier a, lentier b) {
 	bool c = 0;
 	unsigned long long temp = 0;
 	int tailleMax = 0;
-	//CrÈation du lentier s
+	//Cr√©ation du lentier s
 	lentier s;
 	if (a.size >= b.size) {
 		s.size = a.size+1;
@@ -234,110 +263,111 @@ lentier multiplication(lentier a, lentier b) {
 }
 
 lentier division(lentier a, lentier b) {
+
 	lentier q;
-	lentier r;
-
-	q.size = a.size - b.size;
-	q.p = new unsigned int[q.size]();
-	r.size = b.size - 1;
-
-	//0
+	lentier h; //help
 	lentier nul;
+	lentier Atemp;//Ce sera le reste
+
 	nul.size = 1;
-	nul.p = new unsigned int[nul.size];
-	nul.p[0] = 0;
+	nul.p = new unsigned int[nul.size]();
+
+	unsigned int exp = 0; //exposant
+
+	q.size = a.size - b.size + 1;
+	q.p = new unsigned int[q.size]();
+
+	exp = a.size - b.size;
+
+	h.size = exp + 1;
+	h.p = new unsigned int[h.size]();
 
 
-	if (a.size < b.size) {
-		//impossible
-		cout << "a est infÈrieur ‡ b" << endl;
-	}
-	else {
+	h.p[exp] = 1; //h=r^n-t
 
-		lentier base1;
-		lentier base2;
-		base2.size = a.size - b.size + 1;
-		base2.p = new unsigned int[base2.size];
+	lentier multi;
+	multi = multiplication(b, h); //Br^n-t;
+	lentier atemp;
 
-		base1.size = 2;
-		base1.p = new unsigned int[base1.size];
-		base1.p[1] = 1;
-		base1.p[0] = 0;
+	while (estSuperieur(a, b) >= 0) {
 
-		base2.p[1] = 1;
-		base2.p[0] = 0;
+		q.p[a.size - b.size]++;
 
-		for (unsigned int i = 1; i < a.size - b.size; i++) {
+		atemp = soustraction(a, h);
 
-			base2 = multiplication(base2, base1);
-		}
+		delete[] a.p;
+		
+		a = addition(atemp, nul);
 
-		base2 = multiplication(base2, b);
+		lAdjust(a);
 
-		while (estSuperieur(a, base2) >= 0) {
-
-			q.p[a.size - b.size]++;
-			a = soustraction(a, base2);
-		}
-
-
-		for (unsigned int i = a.size - 1; i <= b.size; i++) {
-
-			if (a.p[i] == b.p[b.size - 1]) {
-				q.p[i - b.size] = 0xFFFFFFFF;
-			}
-			else {
-				q.p[i - b.size] = ((a.p[i] << 32) + a.p[i - 1]) / b.p[b.size - 1];
-			}
-
-			lentier temp1;
-			lentier temp2;
-			temp1.size = 3;
-			temp2.size = 3;
-
-			temp1.p = new unsigned int[temp1.size];
-			temp2.p = new unsigned int[temp2.size];
-
-			temp1.p[2] = (q.p[i - b.size] * b.p[b.size - 1]) >> 32;
-			temp1.p[1] = (((unsigned long long)q.p[i - b.size] * b.p[b.size - 1]) & 0xFFFFFFFF + ((unsigned long long)
-				q.p[i - b.size] * b.p[b.size - 2])) >> 32;
-			temp1.p[0] = (q.p[i - b.size] * b.p[b.size - 2]) & 0xFFFFFFFF;
-			temp2.p[2] = a.p[i];
-			temp2.p[1] = a.p[i - 1];
-
-			while (estSuperieur(temp1, temp2) >= 0)
-			{
-				q.p[i - b.size]--;
-
-			}
-
-			//c)
-
-			temp1.p[2] = 0;
-			temp1.p[1] = 0;
-			temp1.p[0] = q.p[i - b.size];
-
-			base2.p[1] = 1;
-			base2.p[0] = 0;
-			for (unsigned int k = 1; k < i - b.size; k++) {
-
-				base2 = multiplication(base2, base1);
-			}
-
-
-			temp2 = multiplication(b, base2);
-			a = soustraction(a, multiplication(temp1, temp2));
-
-			//d)
-
-			if (estSuperieur(a, nul) == 1) {
-				a = addition(a, base2);
-				q.p[i - b.size]--;
-			}
-
-		}
-		r = addition(a, nul); //pour faire r=a;
-		return r;
+		delete[] atemp.p;
 	}
 
+	delete[] h.p;
+
+	for (unsigned int i = a.size - 1; i <= b.size; i++) {
+		//a
+		if (a.p[i] == b.p[b.size - 1]) {
+			q.p[i - b.size] = 4294967295;
+		}
+		else {
+
+			q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
+		}
+		
+		//b
+
+		while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1]) > a.p[i] * pow(2, 32) || (
+			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1]) == a.p[i] * pow(2, 32) &&
+			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2]) > (a.p[i - 1] * pow(2, 32) + a.p[i - 2]))) {
+
+			q.p[i - b.size]--;
+		}
+
+		//c
+
+		lentier ctemp;
+		ctemp.size = i - b.size + 1;
+
+		exp = i - b.size;
+
+		ctemp.p = new unsigned int[ctemp.size];
+
+		ctemp.p[exp] = q.p[i - b.size]; //Qi-t*r^i-t
+		delete[] multi.p;
+		multi = multiplication(ctemp, b);
+		delete[]ctemp.p;
+
+		if (estSuperieur(a, multi) >= 0) {
+
+			Atemp = soustraction(atemp, multi);
+
+		}
+		else {
+			ctemp.p = new unsigned int[ctemp.size];
+			ctemp.p[exp] = 1; //r^i-t
+			h = multiplication(b, ctemp); //Br^i-t
+
+			Atemp = addition(atemp, h);
+			q.p[i - b.size]--;
+
+		}
+		delete[] atemp.p;
+		delete[] ctemp.p;
+		delete[] h.p;
+	}
+
+	return Atemp;
+}
+
+void lAdjust(lentier& a) {
+	unsigned int i = a.size-1;
+	while (a.p[i] == 0) {
+		i--;
+	}
+	a.size = a.size - i;
+	for (int y = a.size - 1; y > i; y--) {
+		free(&a.p[y]);
+	}
 }
