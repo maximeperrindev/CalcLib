@@ -119,17 +119,17 @@ int main(int argc, const char * argv[]) {
 
 	b.p[1] = 1;
 	b.p[0] = 0;
+	
+	Affiche_lentier(a);
+	Affiche_lentier(b);
 
 	s = div_eucl(a, b);
 
 	//Résultat opération
-	cout << "Reste: ";
-	for (int i = s.size; i >0 ; i--) {
-        cout << s.p[i-1] << " ";
-	}
-	cout << endl;
+	
+	Affiche_lentier(s);
 
-    delete[] s.p;
+    //delete[] s.p;
     return 0;
 }
  
