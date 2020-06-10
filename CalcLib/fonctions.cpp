@@ -143,7 +143,7 @@ char cmp_lentier(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 		return -1;
 	}
 	else {
-		for (int i = 0; i < a.size; i++) {
+		for (int i = a.size-1; i >=0; i--) {
 			if (a.p[i] > b.p[i]) {
 				return 1;
 			}
@@ -319,17 +319,16 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 		delete[] a.p;
 
 		a = add_lentier(atemp, nul);
-
 		lAdjust(a);
 		for (unsigned int k = a.size; k > 0; k--) {
 			cout << a.p[k - 1] << " ";
 		} cout << endl;
 		delete[]atemp.p;
 	}
+
 	atemp = add_lentier(a, nul);//permet de retourner a si on rentre pas dans le for suivant
 	lAdjust(atemp);
 	//ça marche jusque là
-
 
 	for (unsigned int i = a.size - 1; i >= b.size; i--) {
 		//a
@@ -340,7 +339,6 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 			q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
 		}
-
 
 		//b
 
@@ -380,6 +378,9 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 			q.p[i - b.size]--;
 
 		}
+
+		
+
 		delete[] atemp.p;
 		delete[] ctemp.p;
 		delete[] h.p;
@@ -390,7 +391,6 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 	}
 
 	delete[] nul.p;
-
 	return atemp;
 }
 
