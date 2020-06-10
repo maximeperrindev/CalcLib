@@ -50,24 +50,23 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-    a.p = new unsigned int[5];
-    b.p = new unsigned int[3];
 
-    b.size = 3;
+    a.size = 6;
+    b.size = 5;
 
-    a.size = 5;
+    a.p = new unsigned int[6]();
+    b.p = new unsigned int[5]();
 
-    a.p[0] = 0;
-    a.p[1] = 0;
-    a.p[2] = 0;
-    a.p[3] = 0;
     a.p[4] = 1;
 
-    b.p[0] = 0;
-    b.p[1] = 0;
-    b.p[2] = 1;
+    lAdjust(a);
 
-    s = division(a, b);
+    for (int i = 0; i < a.size; i++) {
+        cout << a.p[i] << endl;
+    }
+   
+    s.size = a.size;
+    s = multiplication(a, b);
 
     for (int i = 0; i < s.size; i++) {
         cout << s.p[i] << endl;
@@ -78,8 +77,6 @@ int main(int argc, const char * argv[]) {
 
     a.size = floor((getNumbersChar(nombre1) * log(10)) / (32 * log(2))) + 1;
     b.size = floor((getNumbersChar(nombre2) * log(10)) / (32 * log(2))) + 1;
-
-   
 
     a = repartitionTab(nombre1, a.size);
     b = repartitionTab(nombre2, b.size);
@@ -114,7 +111,6 @@ int main(int argc, const char * argv[]) {
 	for (int i = 0; i < s.size; i++) {
         cout << s.p[i] << endl;
 	}
-
     delete[] s.p;
     return 0;
 }

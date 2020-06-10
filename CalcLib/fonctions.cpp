@@ -92,41 +92,39 @@ void dynamicChar(char*& nombre) {
 }
 */
 
-lentier repartitionTab(char* a, int tailleBase) {
+lentier dec2lentier(char* a, int tailleBase) {
 	lentier s;
-	lentier temp;
-	lentier temp2;
 	lentier base10;
-	float multi = 0;
 	unsigned long long retenue = 0;
 	int taille = getNumbersChar(a);
 
 	s.size = tailleBase;
-	temp.size = s.size;
 	base10.size = s.size;
-	temp.p = new unsigned int[tailleBase]();
+
 	base10.p = new unsigned int[tailleBase]();
 	s.p = new unsigned int[tailleBase]();
 
 	for (int i = 0; i < tailleBase; i++) {
 		for (int y = i * 9; y < taille && y < (i + 1) * 9; y++) {
-			base10.p[i] += (int)(a[taille - y - 1] - 48) * pow(10, y - i * 9);
+			base10.p[i] += (int)(a[taille - y - 1] - 48) * powl(10, y - i * 9);
 		}
-		
 	}
 	for (int i = tailleBase - 1; i > 0; i--) {
-		s.p[i] += (base10.p[base10.size-1] * pow(10, 9 * i)) / pow(2, 32 * i);
-		base10.p[base10.size-1] += fmod(fmod(base10.p[base10.size - 1] * pow(10, 9 * i), pow(2, 32 * i)), pow(10,9*(i-1)));
+		s.p[i] += (base10.p[base10.size-1] * powl(10, 9 * i)) / powl(2, 32 * i);
+		base10.p[base10.size-1] = (base10.p[base10.size - 1] * powl(10, 9 * i) - s.p[i]*powl(2, 32 * i))/ powl(10,9*(i-1));
+		
 		cout << "retenue" << retenue << endl;
-		base10.p[base10.size-1] = fmod(base10.p[base10.size - 1] * pow(10, 9 * i), pow(2, 32 * i)) / pow(10, 9 * (i - 1));
-		cout << s.p[0] << " = s" << endl;
+		cout << s.p[i] << " = s" << endl;
 		cout << "base10" << base10.p[base10.size-1] << endl;
 	}
-	retenue = fmod(s.p[2] * pow(2, 64) + s.p[1] * pow(2, 32), 1000000000);
-	
+	s.p[0] = base10.p[base10.size - 1];
+	/*s.p[0] = base10.p[base10.size - 1];
+	retenue = fmodl(s.p[2] * powl(2, 64) + s.p[1] * powl(2, 32) + s.p[0], pow(10,9));
 	cout << "retenue" << retenue << endl;
-	s.p[0] = base10.p[base10.size - 1] + retenue;
-	/*s.p[i] = round(temp.p[i] * pow(10, 9 * i) / pow(2, 32 * i)) + retenue;
+	s.p[0] += retenue;
+	retenue = fmodl(s.p[2] * powl(2, 64) + s.p[1] * powl(2, 32) + s.p[0], pow(10,9));
+	cout << "retenue" << retenue << endl;
+	s.p[i] = round(temp.p[i] * pow(10, 9 * i) / pow(2, 32 * i)) + retenue;
 	retenue = 0;
 	for (int y = tailleBase - 1; y >= i; y--) {
 		retenue += ceil((temp.p[y] * pow(10, 9 * y) - s.p[y] * pow(2, 32 * y)) / pow(2, 32 * (i - 1)));
@@ -136,7 +134,7 @@ lentier repartitionTab(char* a, int tailleBase) {
 	return s;
 }
 
-char estSuperieur(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
+char cmp_lentier(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 {
 	if (a.size > b.size) {
 		return 1;
@@ -157,7 +155,7 @@ char estSuperieur(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 	}
 }
 
-lentier addition(lentier a, lentier b) {
+lentier add_lentier(lentier a, lentier b) {
 	bool c = 0;
 	unsigned long long temp = 0;
 	int tailleMax = 0;
@@ -196,13 +194,13 @@ lentier addition(lentier a, lentier b) {
 	return s;
 }
 
-lentier soustraction(lentier a, lentier b) {
+lentier sub_lentier(lentier a, lentier b) {
     int c = 0;
     long long temp = 0;
 	int tailleMax = 0;
 	lentier s;	
 
-	if (estSuperieur(a, b) >= 0) {
+	if (cmp_lentier(a, b) >= 0) {
 		s.size = a.size;
 		tailleMax = b.size;
 		s.p = new unsigned int[s.size]();
@@ -243,7 +241,7 @@ lentier soustraction(lentier a, lentier b) {
     return s;
 }
 
-lentier multiplication(lentier a, lentier b) {
+lentier mult_classique(lentier a, lentier b) {
 	lentier s;
 	long long temp = 0;
 	int c = 0;
@@ -262,7 +260,9 @@ lentier multiplication(lentier a, lentier b) {
 	return s;
 }
 
-lentier division(lentier a, lentier b) {
+lentier div_eucl(lentier adiv, lentier bdiv) {
+
+	lentier a, b;
 
 	lentier q;
 	lentier h; //help
@@ -272,10 +272,16 @@ lentier division(lentier a, lentier b) {
 	nul.size = 1;
 	nul.p = new unsigned int[nul.size]();
 
+	a = add_lentier(adiv, nul);
+	b = add_lentier(bdiv, nul);
+	lAdjust(a);
+	lAdjust(b);
+
 	unsigned int exp = 0; //exposant
 
 	q.size = a.size - b.size + 1;
 	q.p = new unsigned int[q.size]();
+
 
 	exp = a.size - b.size;
 
@@ -286,27 +292,46 @@ lentier division(lentier a, lentier b) {
 	h.p[exp] = 1; //h=r^n-t
 
 	lentier multi;
-	multi = multiplication(b, h); //Br^n-t;
+	multi = mult_classique(b, h); //Br^n-t;
+	lAdjust(multi);
+	for (unsigned int k = multi.size; k > 0; k--) {
+		cout << multi.p[k - 1] << " ";
+	} cout << endl;
 	lentier atemp;
 
-	while (estSuperieur(a, b) >= 0) {
+	while (cmp_lentier(a, multi) >= 0) {
+		cout << "a: ";
+		for (unsigned int k = a.size; k > 0; k--) {
+			cout << a.p[k - 1];
+		} cout << endl;
+		cout << "b: ";
+		for (unsigned int k = b.size; k > 0; k--) {
+			cout << b.p[k - 1];
+		} cout << endl;
 
 		q.p[a.size - b.size]++;
 
-		atemp = soustraction(a, h);
+		atemp = sub_lentier(a, multi);
+		for (unsigned int k = atemp.size; k > 0; k--) {
+			cout << atemp.p[k - 1] << " ";
+		} cout << endl;
 
 		delete[] a.p;
-		
-		a = addition(atemp, nul);
+
+		a = add_lentier(atemp, nul);
 
 		lAdjust(a);
-
-		delete[] atemp.p;
+		for (unsigned int k = a.size; k > 0; k--) {
+			cout << a.p[k - 1] << " ";
+		} cout << endl;
+		delete[]atemp.p;
 	}
+	atemp = add_lentier(a, nul);//permet de retourner a si on rentre pas dans le for suivant
+	lAdjust(atemp);
+	//ça marche jusque là
 
-	delete[] h.p;
 
-	for (unsigned int i = a.size - 1; i <= b.size; i++) {
+	for (unsigned int i = a.size - 1; i >= b.size; i--) {
 		//a
 		if (a.p[i] == b.p[b.size - 1]) {
 			q.p[i - b.size] = 4294967295;
@@ -315,12 +340,13 @@ lentier division(lentier a, lentier b) {
 
 			q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
 		}
-		
+
+
 		//b
 
-		while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1]) > a.p[i] * pow(2, 32) || (
-			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1]) == a.p[i] * pow(2, 32) &&
-			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2]) > (a.p[i - 1] * pow(2, 32) + a.p[i - 2]))) {
+		while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
+			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
+			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
 
 			q.p[i - b.size]--;
 		}
@@ -336,29 +362,36 @@ lentier division(lentier a, lentier b) {
 
 		ctemp.p[exp] = q.p[i - b.size]; //Qi-t*r^i-t
 		delete[] multi.p;
-		multi = multiplication(ctemp, b);
+		multi = mult_classique(ctemp, b);
 		delete[]ctemp.p;
 
-		if (estSuperieur(a, multi) >= 0) {
+		if (cmp_lentier(a, multi) >= 0) {
 
-			Atemp = soustraction(atemp, multi);
+			Atemp = sub_lentier(atemp, multi);
 
 		}
 		else {
+
 			ctemp.p = new unsigned int[ctemp.size];
 			ctemp.p[exp] = 1; //r^i-t
-			h = multiplication(b, ctemp); //Br^i-t
+			h = mult_classique(b, ctemp); //Br^i-t
 
-			Atemp = addition(atemp, h);
+			Atemp = add_lentier(atemp, h);
 			q.p[i - b.size]--;
 
 		}
 		delete[] atemp.p;
 		delete[] ctemp.p;
 		delete[] h.p;
+
+		atemp = add_lentier(Atemp, nul);
+		lAdjust(atemp);
+		delete[] Atemp.p;
 	}
 
-	return Atemp;
+	delete[] nul.p;
+
+	return atemp;
 }
 
 void lAdjust(lentier& a) {
@@ -366,8 +399,5 @@ void lAdjust(lentier& a) {
 	while (a.p[i] == 0) {
 		i--;
 	}
-	a.size = a.size - i;
-	for (int y = a.size - 1; y > i; y--) {
-		free(&a.p[y]);
-	}
+	a.size = i + 1;
 }

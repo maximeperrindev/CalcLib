@@ -8,24 +8,22 @@ lentier;
 
 int getNumbersChar(char* );
 
-int tailleBase(int, char *);
-
 void checkCharLength(char*, char*);
 
 void remplirTableau(int, int, char* , unsigned int* );
 
 void dynamicChar(char*&);
 
-lentier addition(lentier, lentier);
+lentier add_lentier(lentier, lentier);
 
-lentier soustraction(lentier, lentier);
+lentier sub_lentier(lentier, lentier);
 
-lentier multiplication(lentier, lentier);
+lentier mult_classique(lentier, lentier);
 
-char estSuperieur(lentier, lentier);
+char cmp_lentier(lentier, lentier);
 
-lentier division(lentier a, lentier b);
+lentier div_eucl(lentier a, lentier b);
 
-lentier repartitionTab(char*, int);
+lentier dec2lentier(char*, int);
 
 void lAdjust(lentier& a);
