@@ -50,12 +50,7 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < b.size; i++) {
         cout << b.p[i] << endl;
     }*/
-<<<<<<< HEAD
-=======
-    /*a.p = new unsigned int[5];
-    b.p = new unsigned int[3];
->>>>>>> 1c118a55418ff636eb533948fcf70e25729c74a2
-
+    /*
     a.size = 6;
     b.size = 5;
 
@@ -112,34 +107,28 @@ int main(int argc, const char * argv[]) {
             goto start;
     }
     */
-	a.size = 5;
-	b.size = 3;
+	a.size = 4;
+	b.size = 2;
 	a.p = new unsigned int[a.size]();
 	b.p = new unsigned int[b.size]();
 
-	a.p[4] = 1;
-	a.p[3] = 2;
-	a.p[2] = 8;
+    a.p[3] = 1;
+	a.p[2] = 2;
+	a.p[1] = 3;
+    a.p[0] = 4;
 
-	b.p[2] = 2;
-	b.p[1] = 3;
-	b.p[0] = 5;
+	b.p[1] = 1;
+	b.p[0] = 0;
 
-	s = division(a, b);
-
+	s = div_eucl(a, b);
 
 	//Résultat opération
 	cout << "Reste: ";
 	for (int i = s.size; i >0 ; i--) {
         cout << s.p[i-1] << " ";
 	}
-<<<<<<< HEAD
-=======
 	cout << endl;
 
-
-
->>>>>>> 1c118a55418ff636eb533948fcf70e25729c74a2
     delete[] s.p;
     return 0;
 }

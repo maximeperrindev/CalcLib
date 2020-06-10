@@ -294,36 +294,36 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 	lentier multi;
 	multi = mult_classique(b, h); //Br^n-t;
 	lAdjust(multi);
-	for (unsigned int k = multi.size; k > 0; k--) {
-		cout << multi.p[k - 1] << " ";
-	} cout << endl;
 	lentier atemp;
 
 	while (cmp_lentier(a, multi) >= 0) {
-		cout << "a: ";
-		for (unsigned int k = a.size; k > 0; k--) {
-			cout << a.p[k - 1];
-		} cout << endl;
-		cout << "b: ";
-		for (unsigned int k = b.size; k > 0; k--) {
-			cout << b.p[k - 1];
-		} cout << endl;
 
 		q.p[a.size - b.size]++;
 
 		atemp = sub_lentier(a, multi);
-		for (unsigned int k = atemp.size; k > 0; k--) {
-			cout << atemp.p[k - 1] << " ";
-		} cout << endl;
 
 		delete[] a.p;
 
 		a = add_lentier(atemp, nul);
+
 		lAdjust(a);
-		for (unsigned int k = a.size; k > 0; k--) {
-			cout << a.p[k - 1] << " ";
-		} cout << endl;
+
 		delete[]atemp.p;
+
+		delete[] h.p;
+
+		delete[] multi.p;
+
+		if ((int)a.size - b.size + 1> 0) {
+			h.size = a.size - b.size + 1;
+			h.p = new unsigned int[h.size]();
+
+			h.p[a.size - b.size] = 1;
+
+			multi = mult_classique(b, h); //Br^n-t;
+
+			lAdjust(multi);
+		}
 	}
 
 	atemp = add_lentier(a, nul);//permet de retourner a si on rentre pas dans le for suivant
@@ -377,12 +377,12 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 			Atemp = add_lentier(atemp, h);
 			q.p[i - b.size]--;
 
+			delete[] ctemp.p;
+
 		}
 
-		
-
+	
 		delete[] atemp.p;
-		delete[] ctemp.p;
 		delete[] h.p;
 
 		atemp = add_lentier(Atemp, nul);
