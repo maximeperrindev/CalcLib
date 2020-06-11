@@ -107,7 +107,26 @@ int main(int argc, const char * argv[]) {
             goto start;
     }
     */
-	a.size = 4;
+    cout << log2(19) / log2(2);
+    unsigned int tab[3] = { 0, 0, 1 };
+    unsigned int tab2[2] = { 0, 1 };
+    unsigned int tab3[1] = { 2 };
+    lentier n;
+    a.size = 3;
+    b.size = 2;
+    n.size = 1;
+    a.p = tab;
+    b.p = tab2;
+    n.p = tab3;
+    lentier res;
+    res = exp_mod(a,b,n);
+    cout << "Res: ";
+    for (int i = res.size-1; i > 0; i--) {
+        cout << res.p[i] << " ";
+    }
+    cout << endl;
+
+	/*a.size = 4;
 	b.size = 2;
 	a.p = new unsigned int[a.size]();
 	b.p = new unsigned int[b.size]();
@@ -129,9 +148,14 @@ int main(int argc, const char * argv[]) {
 	}
 	cout << endl;
 
-    delete[] s.p;
+    delete[] s.p;*/
+   
+
     return 0;
 }
+
+
+
  
 
 

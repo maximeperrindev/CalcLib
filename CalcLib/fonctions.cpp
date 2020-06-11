@@ -323,6 +323,7 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 			multi = mult_classique(b, h); //Br^n-t;
 
 			lAdjust(multi);
+			delete[] h.p;
 		}
 	}
 
@@ -378,12 +379,13 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 			q.p[i - b.size]--;
 
 			delete[] ctemp.p;
+			delete[] h.p;
 
 		}
 
 	
 		delete[] atemp.p;
-		delete[] h.p;
+		
 
 		atemp = add_lentier(Atemp, nul);
 		lAdjust(atemp);
@@ -400,4 +402,35 @@ void lAdjust(lentier& a) {
 		i--;
 	}
 	a.size = i + 1;
+}
+//multiplication modulaire
+lentier mul_mod(lentier a, lentier b, lentier n) {
+	lentier t;
+	lentier res;
+	t = mult_classique(a, b);
+	res = div_eucl(t, n);
+	delete[] t.p;
+	return res;
+}
+lentier exp_mod(lentier a, lentier b, lentier n) {
+	lentier p;
+	lentier e;
+	p = a;
+	unsigned long long nbBit;
+	nbBit = (32 * (n.size - 1) + log2(n.p[n.size - 1]) / log2(2));
+	for (int i =nbBit ; i >=0; i--) {
+		p = mul_mod(p, p, n);
+		if (dec2bin(n.p[i/32],i%32)== 1) {
+			p = mul_mod(p, a, n);
+		}
+	}
+	return p;
+}
+bool dec2bin(unsigned int a,int decalage) {
+	bool binaire;
+	a = a >> decalage;
+	binaire = a & 0b1;
+	return binaire;
+
+
 }
