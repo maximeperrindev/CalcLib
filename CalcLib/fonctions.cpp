@@ -293,6 +293,12 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 	lentier multi;
 	multi = mult_classique(b, h); //Br^n-t;
+	
+	/*multi.p = new unsigned int[b.size + h.size];
+	for (unsigned int k = b.size - 1; k >= 0; k--) {
+		multi.p[k + exp] = multi.p[k];
+		
+	}*/
 	lAdjust(multi);
 	lentier atemp;
 
@@ -401,3 +407,11 @@ void lAdjust(lentier& a) {
 	}
 	a.size = i + 1;
 }
+
+void Affiche_lentier(lentier a) {
+	for (unsigned int i = a.size ; i > 0; i--) {
+		cout << a.p[i-1] << "  ";
+	}
+	cout << endl;
+}
+
