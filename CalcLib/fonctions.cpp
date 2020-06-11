@@ -269,17 +269,16 @@ lentier mult_classique(lentier a, lentier b) {
 lentier div_eucl(lentier adiv, lentier bdiv) {
 
 	lentier a, b;
-
+	
 	lentier q;
-	lentier h; //help
-	lentier nul;
+	lentier ctemp;
+	
 	lentier Atemp;//Ce sera le reste
 
-	nul.size = 1;
-	nul.p = new unsigned int[nul.size]();
 
-	a = add_lentier(adiv, nul);
-	b = add_lentier(bdiv, nul);
+
+	a = estEgal(adiv);
+	b = estEgal(bdiv);
 	lAdjust(a);
 	lAdjust(b);
 
@@ -291,21 +290,13 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 	exp = a.size - b.size;
 
-	h.size = exp + 1;
-	h.p = new unsigned int[h.size]();
-
-
-	h.p[exp] = 1; //h=r^n-t
+	
 
 	lentier multi;
-	multi = mult_classique(b, h); //Br^n-t;
+
 	
-	/*multi.p = new unsigned int[b.size + h.size];
-	for (unsigned int k = b.size - 1; k >= 0; k--) {
-		multi.p[k + exp] = multi.p[k];
-		
-	}*/
-	lAdjust(multi);
+	multi = decalage('1', exp, b);
+	
 	lentier atemp;
 
 	while (cmp_lentier(a, multi) >= 0) {
@@ -316,29 +307,24 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 		delete[] a.p;
 
-		a = add_lentier(atemp, nul);
+		a = estEgal(atemp);
 
 		lAdjust(a);
 
 		delete[]atemp.p;
 
-		delete[] h.p;
+		
 
 		delete[] multi.p;
 
 		if ((int)a.size - b.size + 1> 0) {
-			h.size = a.size - b.size + 1;
-			h.p = new unsigned int[h.size]();
-
-			h.p[a.size - b.size] = 1;
-
-			multi = mult_classique(b, h); //Br^n-t;
-
-			lAdjust(multi);
+			
+			exp = a.size - b.size;
+			multi = decalage('1', exp, b); //Br^n-t;
 		}
 	}
 
-	atemp = add_lentier(a, nul);//permet de retourner a si on rentre pas dans le for suivant
+	atemp = estEgal(a);//permet de retourner a si on rentre pas dans le for suivant
 	lAdjust(atemp);
 	//ça marche jusque là
 
@@ -363,14 +349,14 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 		//c
 
-		lentier ctemp;
+		
 		ctemp.size = i - b.size + 1;
 
 		exp = i - b.size;
 
 		ctemp.p = new unsigned int[ctemp.size];
 
-		ctemp.p[exp] = q.p[i - b.size]; //Qi-t*r^i-t
+		ctemp = decalage('1', exp, q); //Qi-t*r^i-t
 		delete[] multi.p;
 		multi = mult_classique(ctemp, b);
 		delete[]ctemp.p;
@@ -382,11 +368,10 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 		}
 		else {
 
-			ctemp.p = new unsigned int[ctemp.size];
-			ctemp.p[exp] = 1; //r^i-t
-			h = mult_classique(b, ctemp); //Br^i-t
+		
+			ctemp = decalage('1', exp, b); //Br^i-t
 
-			Atemp = add_lentier(atemp, h);
+			Atemp = add_lentier(atemp, ctemp);
 			q.p[i - b.size]--;
 
 			delete[] ctemp.p;
@@ -395,14 +380,13 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 	
 		delete[] atemp.p;
-		delete[] h.p;
-
-		atemp = add_lentier(Atemp, nul);
+		
+		atemp = estEgal(Atemp);
 		lAdjust(atemp);
 		delete[] Atemp.p;
 	}
 
-	delete[] nul.p;
+	
 	return atemp;
 }
 
@@ -421,3 +405,42 @@ void Affiche_lentier(lentier a) {
 	cout << endl;
 }
 
+lentier decalage(char sens, unsigned int decal, lentier a) {
+	lentier res;
+	//1 gauche //2 droite
+	if (sens == '1') {
+		res.size = a.size + decal;
+		res.p = new unsigned int[res.size]();
+		for (unsigned int k = a.size; k > 0; k--) {
+
+			res.p[k + decal-1] = a.p[k-1];
+
+		}
+
+	}
+	else if (sens == '2') {
+		res.size = a.size - decal;
+		res.p = new unsigned int[res.size]();
+		for (unsigned int k = 0; k < res.size; k++) {
+
+			res.p[k] = a.p[k+decal];
+
+		}
+	}
+	lAdjust(res);
+	return res;
+}
+	
+lentier estEgal(lentier a){
+	lentier res;
+
+	res.size = a.size;
+	res.p = new unsigned int[res.size];
+
+	for (unsigned int i = 0; i < a.size; i++) {
+		res.p[i] = a.p[i];
+	}
+
+	return res;
+
+}

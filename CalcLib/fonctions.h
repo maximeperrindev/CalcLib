@@ -29,3 +29,7 @@ lentier dec2lentier(char*, int);
 void lAdjust(lentier& a);
 
 void Affiche_lentier(lentier a);
+
+lentier decalage(char sens, unsigned int decal, lentier a);
+
+lentier estEgal(lentier a);
