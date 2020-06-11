@@ -107,6 +107,7 @@ int main(int argc, const char * argv[]) {
             goto start;
     }
     */
+<<<<<<< HEAD
     cout << log2(19) / log2(2);
     unsigned int tab[3] = { 0, 0, 1 };
     unsigned int tab2[2] = { 0, 1 };
@@ -127,6 +128,17 @@ int main(int argc, const char * argv[]) {
     cout << endl;
 
 	/*a.size = 4;
+=======
+    char * tab = new char[30];
+    cin>>tab;
+    lentier x = dec2lentier(tab, floor(((getNumbersChar(tab) * log(10))/(32*log(2)))) + 1);
+    cout<<"Conversion décimal => lentier: ";
+    for (int i = x.size; i >0 ; i--) {
+        cout << x.p[i-1] << " ";
+    }
+    cout << endl;
+	a.size = 4;
+>>>>>>> 4eff7d1ac151e88aa41ba8bcb16d4cdbaf474d2b
 	b.size = 2;
 	a.p = new unsigned int[a.size]();
 	b.p = new unsigned int[b.size]();
@@ -138,19 +150,23 @@ int main(int argc, const char * argv[]) {
 
 	b.p[1] = 1;
 	b.p[0] = 0;
+	
+	Affiche_lentier(a);
+	Affiche_lentier(b);
 
 	s = div_eucl(a, b);
 
 	//Résultat opération
-	cout << "Reste: ";
-	for (int i = s.size; i >0 ; i--) {
-        cout << s.p[i-1] << " ";
-	}
-	cout << endl;
+	
+	Affiche_lentier(s);
 
+<<<<<<< HEAD
     delete[] s.p;*/
    
 
+=======
+    //delete[] s.p;
+>>>>>>> 4eff7d1ac151e88aa41ba8bcb16d4cdbaf474d2b
     return 0;
 }
 

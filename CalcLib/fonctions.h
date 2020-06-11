@@ -27,6 +27,11 @@ lentier div_eucl(lentier a, lentier b);
 lentier dec2lentier(char*, int);
 
 void lAdjust(lentier& a);
+<<<<<<< HEAD
 lentier mul_mod(lentier, lentier, lentier);
 lentier exp_mod(lentier, lentier, lentier);
 bool dec2bin(unsigned int,int);
+=======
+
+void Affiche_lentier(lentier a);
+>>>>>>> 4eff7d1ac151e88aa41ba8bcb16d4cdbaf474d2b
