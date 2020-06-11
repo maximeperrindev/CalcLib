@@ -107,6 +107,14 @@ int main(int argc, const char * argv[]) {
             goto start;
     }
     */
+    char * tab = new char[30];
+    cin>>tab;
+    lentier x = dec2lentier(tab, floor(((getNumbersChar(tab) * log(10))/(32*log(2)))) + 1);
+    cout<<"Conversion décimal => lentier: ";
+    for (int i = x.size; i >0 ; i--) {
+        cout << x.p[i-1] << " ";
+    }
+    cout << endl;
 	a.size = 4;
 	b.size = 2;
 	a.p = new unsigned int[a.size]();

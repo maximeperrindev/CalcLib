@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <math.h>
 
 using namespace std;
@@ -93,45 +93,45 @@ void dynamicChar(char*& nombre) {
 */
 
 lentier dec2lentier(char* a, int tailleBase) {
-	lentier s;
-	lentier base10;
-	unsigned long long retenue = 0;
+	lentier s, base10, giga, x,y;
+
 	int taille = getNumbersChar(a);
 
-	s.size = tailleBase;
-	base10.size = s.size;
+	base10.size = tailleBase;
 
 	base10.p = new unsigned int[tailleBase]();
-	s.p = new unsigned int[tailleBase]();
+
+    
+    giga.size = 1;
+    giga.p = new unsigned int[giga.size]();
+    giga.p[0] = powl(10,9);
 
 	for (int i = 0; i < tailleBase; i++) {
 		for (int y = i * 9; y < taille && y < (i + 1) * 9; y++) {
 			base10.p[i] += (int)(a[taille - y - 1] - 48) * powl(10, y - i * 9);
 		}
 	}
-	for (int i = tailleBase - 1; i > 0; i--) {
-		s.p[i] += (base10.p[base10.size-1] * powl(10, 9 * i)) / powl(2, 32 * i);
-		base10.p[base10.size-1] = (base10.p[base10.size - 1] * powl(10, 9 * i) - s.p[i]*powl(2, 32 * i))/ powl(10,9*(i-1));
-		
-		cout << "retenue" << retenue << endl;
-		cout << s.p[i] << " = s" << endl;
-		cout << "base10" << base10.p[base10.size-1] << endl;
-	}
-	s.p[0] = base10.p[base10.size - 1];
-	/*s.p[0] = base10.p[base10.size - 1];
-	retenue = fmodl(s.p[2] * powl(2, 64) + s.p[1] * powl(2, 32) + s.p[0], pow(10,9));
-	cout << "retenue" << retenue << endl;
-	s.p[0] += retenue;
-	retenue = fmodl(s.p[2] * powl(2, 64) + s.p[1] * powl(2, 32) + s.p[0], pow(10,9));
-	cout << "retenue" << retenue << endl;
-	s.p[i] = round(temp.p[i] * pow(10, 9 * i) / pow(2, 32 * i)) + retenue;
-	retenue = 0;
-	for (int y = tailleBase - 1; y >= i; y--) {
-		retenue += ceil((temp.p[y] * pow(10, 9 * y) - s.p[y] * pow(2, 32 * y)) / pow(2, 32 * (i - 1)));
-	}
-	cout << "retenue = " << retenue << endl;
-	s.p[0] = retenue + temp.p[0];*/
-	return s;
+
+    x.size = 1;
+    x.p = new unsigned int[x.size]();
+    x.p[0] = base10.p[tailleBase-1];
+    for(int i = tailleBase - 1; i > 0; i--){
+        y.size  = 1;
+
+        y.p = new unsigned int[x.size]();
+
+        y.p[0] = base10.p[i-1];
+        
+        s = mult_classique(x, giga);
+        
+        delete[] x.p;
+        
+        x = add_lentier(s, y);
+        delete[] s.p;
+    }
+    
+    lAdjust(x);
+	return x;
 }
 
 char cmp_lentier(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
