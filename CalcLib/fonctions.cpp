@@ -109,15 +109,7 @@ lentier dec2lentier(char* a, int tailleBase) {
 			base10.p[i] += (int)(a[taille - y - 1] - 48) * powl(10, y - i * 9);
 		}
 	}
-	for (int i = tailleBase - 1; i > 0; i--) {
-		s.p[i] += (base10.p[base10.size-1] * powl(10, 9 * i)) / powl(2, 32 * i);
-		base10.p[base10.size-1] = (base10.p[base10.size - 1] * powl(10, 9 * i) - s.p[i]*powl(2, 32 * i))/ powl(10,9*(i-1));
-		
-		cout << "retenue" << retenue << endl;
-		cout << s.p[i] << " = s" << endl;
-		cout << "base10" << base10.p[base10.size-1] << endl;
-	}
-	s.p[0] = base10.p[base10.size - 1];
+
 	/*s.p[0] = base10.p[base10.size - 1];
 	retenue = fmodl(s.p[2] * powl(2, 64) + s.p[1] * powl(2, 32) + s.p[0], pow(10,9));
 	cout << "retenue" << retenue << endl;
@@ -323,6 +315,8 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 			multi = mult_classique(b, h); //Br^n-t;
 
 			lAdjust(multi);
+
+			delete[] h.p;
 		}
 	}
 
@@ -379,6 +373,8 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 			delete[] ctemp.p;
 
+			delete[] h.p;
+
 		}
 
 	
@@ -400,4 +396,38 @@ void lAdjust(lentier& a) {
 		i--;
 	}
 	a.size = i + 1;
+}
+
+void parser(char* chaine) {
+	int taille = strlen(chaine);
+	char** chaineSep;
+	chaineSep = new char*[5];
+	int arret = 0;
+	int separation = 0;
+	int boucle = 1;
+	int caseRempli = 0;
+	while (boucle == 1) {
+		for (int i = arret; i <= taille+1; i++) {
+			if (chaine[i] == '\0') {
+				separation = i-1;
+				boucle = 0;
+				break;
+			}
+			else if (chaine[i] <= 48 || chaine[i] >= 57) {
+				separation = i;
+				break;
+			}		
+		}
+		chaineSep[caseRempli] = new char[separation-arret+1];
+		for (int i = arret; i < separation; i++) {
+				chaineSep[caseRempli][i] = chaine[i];
+				cout << chaineSep[caseRempli][i];
+		}
+		
+		chaineSep[caseRempli + 1] = new char[1];
+		chaineSep[caseRempli + 1][0] = chaine[separation];
+		cout << chaineSep[caseRempli + 1][0];
+		caseRempli += 2;
+		arret = separation + 1;
+	}
 }

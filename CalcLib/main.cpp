@@ -20,6 +20,8 @@ int main(int argc, const char * argv[]) {
     lentier b;
     lentier s;
 
+    char* nombre1 = new char[100];
+
    /* char* nombre1 = new char[100];
     char* nombre2 = new char[100]; */
 
@@ -107,7 +109,11 @@ int main(int argc, const char * argv[]) {
             goto start;
     }
     */
-	a.size = 4;
+
+    cin >> nombre1;
+    parser(nombre1);
+
+	/*a.size = 4;
 	b.size = 2;
 	a.p = new unsigned int[a.size]();
 	b.p = new unsigned int[b.size]();
@@ -129,7 +135,8 @@ int main(int argc, const char * argv[]) {
 	}
 	cout << endl;
 
-    delete[] s.p;
+    delete[] s.p;*/
+
     return 0;
 }
  

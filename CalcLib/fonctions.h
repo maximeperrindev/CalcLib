@@ -26,4 +26,6 @@ lentier div_eucl(lentier a, lentier b);
 
 lentier dec2lentier(char*, int);
 
-void lAdjust(lentier& a);
+void lAdjust(lentier&);
+
+void parser(char*);
