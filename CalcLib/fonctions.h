@@ -37,3 +37,7 @@ lentier exp_mod(lentier, lentier, lentier);
 bool dec2bin(unsigned int,int);
 
 void Affiche_lentier(lentier a);
+
+lentier decalage(char sens, unsigned int decal, lentier a);
+
+lentier estEgal(lentier a);

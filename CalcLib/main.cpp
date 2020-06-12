@@ -166,6 +166,7 @@ int main(int argc, const char * argv[]) {
 
     delete[] s.p;*/
    
+    delete[] nombre1;
     return 0;
 }
 
