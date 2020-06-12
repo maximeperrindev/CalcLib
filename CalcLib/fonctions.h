@@ -5,7 +5,11 @@ typedef struct {
 	unsigned int size;
 }
 lentier;
-
+typedef struct {
+	lentier q;
+	lentier r;
+}
+res_div;
 int getNumbersChar(char* );
 
 void checkCharLength(char*, char*);
@@ -22,7 +26,7 @@ lentier mult_classique(lentier, lentier);
 
 char cmp_lentier(lentier, lentier);
 
-lentier div_eucl(lentier a, lentier b);
+res_div div_eucl(lentier a, lentier b);
 
 lentier dec2lentier(char*, int);
 
@@ -45,3 +49,4 @@ lentier estEgal(lentier a);
 lentier add_lentier_entier(lentier, unsigned int);
 
 lentier add_entier_entier(unsigned int, unsigned int);
+

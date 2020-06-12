@@ -115,16 +115,19 @@ int main(int argc, const char * argv[]) {
 
 
 	  //cout << log2(19) / log2(2);
-	unsigned int tab[4] = { 4, 3, 2, 1 };
-	unsigned int tab2[2] = { 4, 1 };
+	unsigned int tab[4] = { 2, 0, 48488, 154518 };
+	unsigned int tab2[2] = { 0, 48488 };
 	unsigned int tab3[1] = { 2 };
 	lentier n;
 	a.size = 4;
 	b.size = 2;
-	n.size = 1;
+	
 	a.p = tab;
 	b.p = tab2;
-	n.p = tab3;
+	
+	n = decalage('1', 1, b);
+	Affiche_lentier(n);
+
 
 	/*a.size = 4;
 	b.size = 2;
@@ -139,15 +142,18 @@ int main(int argc, const char * argv[]) {
 	b.p[1] = 1;
 	b.p[0] = 4;*/
 
-	lentier res;
+	res_div res;
 
-	// res = exp_mod(a,b,n);
+	//// res = exp_mod(a,b,n);
 
 	res = div_eucl(a, b);
-	cout << "Res: ";
-	Affiche_lentier(res);
+	cout << "q  ";
+	Affiche_lentier(res.q); cout << endl;
+	cout << "r ";
+	Affiche_lentier(res.r);
 
-	delete[]res.p;
+	delete[]res.q.p;
+	delete[]res.r.p;
 
 
 

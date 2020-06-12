@@ -114,6 +114,7 @@ lentier add_lentier(lentier a, lentier b) {
         }
     }
     s.p[s.size-1] = c;
+	lAdjust(s);
 	return s;
 }
 
@@ -159,7 +160,8 @@ lentier sub_lentier(lentier a, lentier b) {
 				s.p[i] = temp & 0xFFFFFFFF;
 			}
 		}
-	}   
+	} 
+	lAdjust(s);
     return s;
 }
 
@@ -178,17 +180,18 @@ lentier mult_classique(lentier a, lentier b) {
 		}
 		s.p[i + b.size] = c;
 	}
-
+	lAdjust(s);
 	return s;
 }
 
-lentier div_eucl(lentier adiv, lentier bdiv) {
+res_div div_eucl(lentier adiv, lentier bdiv) {
 
 	lentier a, b;
 	lentier q;
 	lentier ctemp;
+	res_div res;
 
-	lentier Atemp;//Ce sera le reste
+	lentier Atemp;
 
 	a = estEgal(adiv);
 	b = estEgal(bdiv);
@@ -203,13 +206,11 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 	exp = a.size - b.size;
 
-
-
 	lentier multi;
 
-
 	multi = decalage('1', exp, b);
-
+	cout << "multi:";
+	Affiche_lentier(multi);
 	lentier atemp;
 
 	while (cmp_lentier(a, multi) >= 0) {
@@ -226,124 +227,163 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 		delete[]atemp.p;
 
-
-
 		delete[] multi.p;
-
-		if ((int)a.size - b.size + 1 > 0) {
-
+		cout << "a:";
+		Affiche_lentier(a);
+		if ((long long int)(a.size) - b.size + 1 > 0) {
+			
 			exp = a.size - b.size;
+			cout << "exp: " << exp << endl;
 			multi = decalage('1', exp, b); //Br^n-t;
+			cout << "multi:";
+			Affiche_lentier(multi);
+
+			
+			
 		}
+		else {
+			break;
+		}
+		
 	}
 
 	atemp = estEgal(a);//permet de retourner a si on rentre pas dans le for suivant
 	lAdjust(atemp);
+	lAdjust(a);
 	//ça marche jusque là
+	if (a.size >= 1) {
 
-	for (unsigned int i = a.size - 1; i >= b.size; i--) {
-		//a
-		if (a.p[i] == b.p[b.size - 1]) {
-			q.p[i - b.size] = 4294967295;
-		}
-		else {
 
-			q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
-		}
 
-		//b
 
-		/*while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
-			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
-			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
+		for (unsigned int i = a.size - 1; i >= b.size; i--) {
+			//a
+			Affiche_lentier(q);
+			cout << "r= ";
+			Affiche_lentier(atemp);
 
-			q.p[i - b.size]--;
-		}*/
+			if (a.p[i] == b.p[b.size - 1]) {
+				q.p[i - b.size] = 4294967295;
+			}
+			else {
 
-		lentier x, bis, qbis, abis;
-		
-		bis.size = 2;
-		bis.p = new unsigned int[bis.size];
-		bis.p[1] = b.p[b.size - 1];
-		bis.p[0] = b.p[b.size - 2];
-		qbis.size = 1;
-		qbis.p = new unsigned int[qbis.size];
-		qbis.p[0] = q.p[i - b.size];
+				q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
+			}
 
-		x = mult_classique(qbis, bis);
+			//b
 
-		abis.size = 3;
-		abis.p = new unsigned int[abis.size];
-		abis.p[2] = a.p[i];
-		abis.p[1] = a.p[i - 1];
-		abis.p[0] = a.p[i - 2];
+			/*while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
+				(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
+				(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
 
-		while (cmp_lentier(x, abis) == 1) {
-			q.p[i - b.size]--;
+				q.p[i - b.size]--;
+			}*/
 
+			lentier x, bis, qbis, abis;
+
+			bis.size = 2;
+			bis.p = new unsigned int[bis.size];
+			bis.p[1] = b.p[b.size - 1];
+			bis.p[0] = b.p[b.size - 2];
+			qbis.size = 1;
+			qbis.p = new unsigned int[qbis.size];
 			qbis.p[0] = q.p[i - b.size];
-			delete[]x.p;
-			
+
 			x = mult_classique(qbis, bis);
+
+			abis.size = 3;
+			abis.p = new unsigned int[abis.size];
+			abis.p[2] = a.p[i];
+			abis.p[1] = a.p[i - 1];
+			abis.p[0] = a.p[i - 2];
+
+			while (cmp_lentier(x, abis) == 1) {
+				q.p[i - b.size]--;
+
+				qbis.p[0] = q.p[i - b.size];
+				delete[]x.p;
+
+				x = mult_classique(qbis, bis);
+			}
+
+			delete[]x.p;
+			delete[]abis.p;
+			delete[]qbis.p;
+			delete[]bis.p;
+
+
+
+
+			//c
+
+
+			ctemp.size = i - b.size + 1;
+
+			exp = i - b.size;
+			cout << "exp= " << exp << endl;
+
+
+
+			ctemp.p = new unsigned int[ctemp.size];
+			lentier q2;
+			q2.size = 1;
+			q2.p = new unsigned int[q.size];
+			q2.p[0] = q.p[i - b.size];
+			ctemp = decalage('1', exp, q2); //Qi-t*r^i-t
+			cout << "ctemp: " << endl;
+			Affiche_lentier(ctemp);
+
+			multi = mult_classique(ctemp, b);
+			lAdjust(multi);
+			cout << "multi: " << endl;
+			Affiche_lentier(multi);
+			delete[]ctemp.p;//CEST TOUT BON
+
+
+			if (cmp_lentier(atemp, multi) >= 0) {
+
+				Atemp = sub_lentier(atemp, multi);
+
+			}
+			else {
+
+				lentier z;
+				z.size = 1;
+				z.p = new unsigned int[z.size];
+
+				z = add_entier_entier(q.p[i - b.size], 1);
+
+
+				ctemp = decalage('1', exp, b); //Br^i-t
+				delete[]multi.p;
+				multi = mult_classique(z, ctemp);
+				Atemp = add_lentier(atemp, multi);
+				q.p[i - b.size]--;
+
+				delete[] ctemp.p;
+
+			}
+
+			delete[] multi.p;
+			delete[] atemp.p;
+
+			atemp = estEgal(Atemp);
+			lAdjust(atemp);
+			delete[] Atemp.p;
+			/////////////////////////////////////////////////////////////////////// pas sur
+			if ((atemp.size - 1) < b.size) {
+				break;
+			}
 		}
-
-		delete[]x.p;
-		delete[]abis.p;
-		delete[]qbis.p;
-		delete[]bis.p;
-
-
-		
-
-		//c
-
-
-		ctemp.size = i - b.size + 1;
-
-		exp = i - b.size;
-
-		ctemp.p = new unsigned int[ctemp.size];
-
-		ctemp = decalage('1', exp, q); //Qi-t*r^i-t
-		delete[] multi.p;
-		multi = mult_classique(ctemp, b);
-		delete[]ctemp.p;
-
-
-		if (cmp_lentier(a, multi) >= 0) {
-
-			Atemp = sub_lentier(atemp, multi);
-
-		}
-		else {
-			
-			lentier z;
-			z.size = 1;
-			z.p = new unsigned int[z.size];
-
-			z = add_entier_entier(q.p[i - b.size], 1);
-
-			
-			ctemp = decalage('1', exp, b); //Br^i-t
-			delete[]multi.p;
-			multi = mult_classique(z, ctemp);
-			Atemp = add_lentier(atemp, multi);
-			q.p[i - b.size]--;
-
-			delete[] ctemp.p;
-			
-		}
-
-		delete[] multi.p;
-		delete[] atemp.p;
-
-		atemp = estEgal(Atemp);
-		lAdjust(atemp);
-		delete[] Atemp.p;
 	}
-
-
-	return atemp;
+	else {
+	atemp.size = 1;
+	atemp.p = new unsigned int[1];
+	atemp.p[0] = 0;
+	}
+	res.q = q;
+	res.r = atemp;
+	return res;
 }
 
 void lAdjust(lentier& a) {
@@ -391,11 +431,11 @@ void parser(char* chaine) {
 //multiplication modulaire
 lentier mul_mod(lentier a, lentier b, lentier n) {
 	lentier t;
-	lentier res;
+	res_div res;
 	t = mult_classique(a, b);
 	res = div_eucl(t, n);
 	delete[] t.p;
-	return res;
+	return res.r;
 }
 lentier exp_mod(lentier a, lentier b, lentier n) {
 	lentier p;
