@@ -29,3 +29,11 @@ lentier dec2lentier(char*, int);
 void lAdjust(lentier&);
 
 void parser(char*);
+
+lentier mul_mod(lentier, lentier, lentier);
+
+lentier exp_mod(lentier, lentier, lentier);
+
+bool dec2bin(unsigned int,int);
+
+void Affiche_lentier(lentier a);
