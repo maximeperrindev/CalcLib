@@ -5,11 +5,13 @@ typedef struct {
 	unsigned int size;
 }
 lentier;
+
 typedef struct {
 	lentier q;
 	lentier r;
 }
 res_div;
+
 int getNumbersChar(char* );
 
 void checkCharLength(char*, char*);
@@ -28,11 +30,11 @@ char cmp_lentier(lentier, lentier);
 
 res_div div_eucl(lentier a, lentier b);
 
-lentier dec2lentier(char*, int);
+lentier dec2lentier(char*);
 
 void lAdjust(lentier&);
 
-void parser(char*);
+char** parser(char*);
 
 lentier mul_mod(lentier, lentier, lentier);
 

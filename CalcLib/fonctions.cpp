@@ -9,14 +9,14 @@ int getNumbersChar(char* a) {
 	return strlen(a);
 }
 
-lentier dec2lentier(char* a, int tailleBase) {
+lentier dec2lentier(char* a) {
 	lentier s, base10, giga, x,y; //Variables utilisées
 
 	int taille = getNumbersChar(a); //On récupère la taille de la chaîne passée en paramètre
 
     //Création du lentier pour le nombre en base 10
-	base10.size = tailleBase;
-	base10.p = new unsigned int[tailleBase]();
+	base10.size = floor((getNumbersChar(a) * log(10)) / (32 * log(2))) + 1;
+	base10.p = new unsigned int[base10.size]();
 
     //Création du lentier 10^9 pour changer de base
     giga.size = 1;
@@ -24,7 +24,7 @@ lentier dec2lentier(char* a, int tailleBase) {
     giga.p[0] = powl(10,9);
 
     //Boucle qui transforme notre chaîne de caractère en lentier
-	for (int i = 0; i < tailleBase; i++) {
+	for (int i = 0; i < base10.size; i++) {
 		for (int y = i * 9; y < taille && y < (i + 1) * 9; y++) {
 			base10.p[i] += (int)(a[taille - y - 1] - 48) * powl(10, y - i * 9);
 		}
@@ -33,10 +33,10 @@ lentier dec2lentier(char* a, int tailleBase) {
     //Création de la variable x qui a comme première valeur la case de poids faible de base10
     x.size = 1;
     x.p = new unsigned int[x.size]();
-    x.p[0] = base10.p[tailleBase-1];
+    x.p[0] = base10.p[base10.size-1];
     
     //Schéma de Horner
-    for(int i = tailleBase - 1; i > 0; i--){
+    for(int i = base10.size - 1; i > 0; i--){
         y.size  = 1;
 
         y.p = new unsigned int[x.size]();
@@ -394,10 +394,9 @@ void lAdjust(lentier& a) {
 	a.size = i + 1;
 }
 
-void parser(char* chaine) {
+char** parser(char* chaine) {
 	int taille = strlen(chaine);
-	char** chaineSep;
-	chaineSep = new char*[5];
+	char** chaineSep = new char*[6]();
 	int arret = 0;
 	int separation = 0;
 	int boucle = 1;
@@ -405,15 +404,15 @@ void parser(char* chaine) {
 	while (boucle == 1) {
 		for (int i = arret; i <= taille+1; i++) {
 			if (chaine[i] < 48 || chaine[i] > 57) {
-				chaineSep[caseRempli] = new char[i - arret + 1];
+				chaineSep[caseRempli] = new char[i-arret+1]();
 				for (int y = arret; y < i; y++) {
-					chaineSep[caseRempli][y] = chaine[y];
-					cout << chaineSep[caseRempli][y];
+					chaineSep[caseRempli][y-arret] = chaine[y];
 				}
+				chaineSep[caseRempli][i - arret] = '\0';
 				if (chaine[i] != '\0') {
-					chaineSep[caseRempli + 1] = new char[1];
-					chaineSep[caseRempli + 1][0] = chaine[i];
-					cout << chaineSep[caseRempli+1][0];
+					chaineSep[caseRempli + 1] = new char[2]();
+					chaineSep[caseRempli + 1][0] = (char)(chaine[i]);
+					chaineSep[caseRempli + 1][1] = '\0';
 					caseRempli += 2;
 					arret = i + 1;
 				}
@@ -425,7 +424,8 @@ void parser(char* chaine) {
 			}		
 		}			
 	}
-	delete[] chaineSep;
+	chaineSep[caseRempli + 1] = new char[1]();
+	return chaineSep;
 }
 
 //multiplication modulaire
