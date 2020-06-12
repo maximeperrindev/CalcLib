@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     lentier b;
     lentier s;
 
-    char* nombre1 = new char[100];
+   // char* nombre1 = new char[100];
 
    /* char* nombre1 = new char[100];
     char* nombre2 = new char[100]; */
@@ -110,28 +110,44 @@ int main(int argc, const char * argv[]) {
     }
     */
 
-    cin >> nombre1;
-    parser(nombre1);
+    /*cin >> nombre1;
+    parser(nombre1);*/
 
-	/*a.size = 4;
-    cout << log2(19) / log2(2);
-    unsigned int tab[3] = { 0, 0, 1 };
-    unsigned int tab2[2] = { 0, 1 };
+	
+    //cout << log2(19) / log2(2);
+    unsigned int tab[4] = { 4, 3, 2, 1 };
+    unsigned int tab2[2] = { 4, 1 };
     unsigned int tab3[1] = { 2 };
     lentier n;
-    a.size = 3;
+    a.size = 4;
     b.size = 2;
     n.size = 1;
     a.p = tab;
     b.p = tab2;
     n.p = tab3;
+	
+	/*a.size = 4;
+	b.size = 2;
+	a.p = new unsigned int[a.size];
+	b.p = new unsigned int[b.size];
+
+	a.p[3] = 1;
+	a.p[2] = 2;
+	a.p[1] = 3;
+	a.p[0] = 4;
+
+	b.p[1] = 1;
+	b.p[0] = 4;*/
+
     lentier res;
-    res = exp_mod(a,b,n);
+
+   // res = exp_mod(a,b,n);
+
+	res = div_eucl(a, b);
     cout << "Res: ";
-    for (int i = res.size-1; i > 0; i--) {
-        cout << res.p[i] << " ";
-    }
-    cout << endl;
+	Affiche_lentier(res);
+
+
 
 	/*a.size = 4;
     char * tab = new char[30];
@@ -166,7 +182,7 @@ int main(int argc, const char * argv[]) {
 
     delete[] s.p;*/
    
-    delete[] nombre1;
+    
     return 0;
 }
 

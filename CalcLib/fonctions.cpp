@@ -185,13 +185,10 @@ lentier mult_classique(lentier a, lentier b) {
 lentier div_eucl(lentier adiv, lentier bdiv) {
 
 	lentier a, b;
-
 	lentier q;
 	lentier ctemp;
 
 	lentier Atemp;//Ce sera le reste
-
-
 
 	a = estEgal(adiv);
 	b = estEgal(bdiv);
@@ -256,12 +253,47 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 
 		//b
 
-		while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
+		/*while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
 			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
 			(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
 
 			q.p[i - b.size]--;
+		}*/
+
+		lentier x, bis, qbis, abis;
+		
+		bis.size = 2;
+		bis.p = new unsigned int[bis.size];
+		bis.p[1] = b.p[b.size - 1];
+		bis.p[0] = b.p[b.size - 2];
+		qbis.size = 1;
+		qbis.p = new unsigned int[qbis.size];
+		qbis.p[0] = q.p[i - b.size];
+
+		x = mult_classique(qbis, bis);
+
+		abis.size = 3;
+		abis.p = new unsigned int[abis.size];
+		abis.p[2] = a.p[i];
+		abis.p[1] = a.p[i - 1];
+		abis.p[0] = a.p[i - 2];
+
+		while (cmp_lentier(x, abis) == 1) {
+			q.p[i - b.size]--;
+
+			qbis.p[0] = q.p[i - b.size];
+			delete[]x.p;
+			
+			x = mult_classique(qbis, bis);
 		}
+
+		delete[]x.p;
+		delete[]abis.p;
+		delete[]qbis.p;
+		delete[]bis.p;
+
+
+		
 
 		//c
 
@@ -277,24 +309,32 @@ lentier div_eucl(lentier adiv, lentier bdiv) {
 		multi = mult_classique(ctemp, b);
 		delete[]ctemp.p;
 
+
 		if (cmp_lentier(a, multi) >= 0) {
 
 			Atemp = sub_lentier(atemp, multi);
 
 		}
 		else {
+			
+			lentier z;
+			z.size = 1;
+			z.p = new unsigned int[z.size];
 
+			z = add_entier_entier(q.p[i - b.size], 1);
 
+			
 			ctemp = decalage('1', exp, b); //Br^i-t
-
-			Atemp = add_lentier(atemp, ctemp);
+			delete[]multi.p;
+			multi = mult_classique(z, ctemp);
+			Atemp = add_lentier(atemp, multi);
 			q.p[i - b.size]--;
 
 			delete[] ctemp.p;
-
+			
 		}
 
-
+		delete[] multi.p;
 		delete[] atemp.p;
 
 		atemp = estEgal(Atemp);
@@ -427,4 +467,31 @@ lentier estEgal(lentier a) {
 	return res;
 
 }
+lentier add_lentier_entier(lentier l, unsigned int a) {
 
+	lentier res, b;
+	b.size = 1;
+	b.p = new unsigned int[b.size];
+
+	b.p[0] = a;
+
+	res = add_lentier(l, b);
+
+	return res;
+}
+
+lentier add_entier_entier(unsigned int a, unsigned int b) {
+
+	lentier res, abis;
+	res.size = 2;
+	res.p = new unsigned int[res.size]();
+	res.p[0] = a + b;
+
+	if ((unsigned long long)a + b > 4294967295) {
+		res.p[1] = 1;
+	}
+
+	lAdjust(res);
+	return res;
+	
+}

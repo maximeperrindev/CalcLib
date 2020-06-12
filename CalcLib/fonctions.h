@@ -41,3 +41,7 @@ void Affiche_lentier(lentier a);
 lentier decalage(char sens, unsigned int decal, lentier a);
 
 lentier estEgal(lentier a);
+
+lentier add_lentier_entier(lentier, unsigned int);
+
+lentier add_entier_entier(unsigned int, unsigned int);
