@@ -267,7 +267,7 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			}
 			else {
 
-				q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
+				q.p[i - b.size] = ((unsigned long long)(a.p[i]) * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
 			}
 
 			//b
@@ -517,6 +517,7 @@ lentier add_lentier_entier(lentier l, unsigned int a) {
 
 	res = add_lentier(l, b);
 
+	lAdjust(res);
 	return res;
 }
 
@@ -534,4 +535,103 @@ lentier add_entier_entier(unsigned int a, unsigned int b) {
 	lAdjust(res);
 	return res;
 	
+}
+
+res_div div_eucl_1case(lentier adiv, lentier bdiv) {
+	lentier a, b,temp,multi,decale;
+	a = estEgal(adiv);
+	b = estEgal(bdiv);
+	res_div res;
+	res.q.size = a.size - b.size + 1;
+	res.q.p = new unsigned int[res.q.size]();
+	res.r.size = b.size;
+	res.r.p = new unsigned int[res.r.size]();
+
+	while(a.size>1){
+		
+		if (a.p[a.size - 1] >= b.p[0]) {
+
+			res.q.p[a.size-b.size] = a.p[a.size - 1] / b.p[0];
+			temp = estEgal(a);
+			delete[]a.p;
+			multi = mult_lentier_entier(b, res.q.p[a.size - b.size]);
+			cout << "multi ";
+			Affiche_lentier(multi);
+			cout << endl;
+			decale = decalage('1', a.size - 1, multi);
+			cout << "decale ";
+			Affiche_lentier(decale);
+			cout << endl;
+			a = sub_lentier(temp, decale);
+			delete[]multi.p;
+			delete[]temp.p;
+			delete[]decale.p;
+			cout << "a: ";
+			Affiche_lentier(a);
+			cout << endl;
+		}
+		else {
+			Affiche_lentier(a);
+			cout << endl;
+			res.q.p[a.size-1-b.size] = ((unsigned long long)(a.p[a.size-1]) * pow(2, 32) + a.p[a.size - 2]) / b.p[b.size - 1];
+
+			temp = estEgal(a);
+			delete[]a.p;
+			multi = mult_lentier_entier(b, res.q.p[a.size - 1-b.size]);
+			cout << "multi ";
+			Affiche_lentier(multi);
+			cout << endl;
+			decale = decalage('1', a.size - 2, multi);
+			cout << "decale ";
+			Affiche_lentier(decale);
+			cout << endl;
+			a = sub_lentier(temp, decale);
+			delete[]multi.p;
+			delete[]temp.p;
+			delete[]decale.p;
+			cout << "a: ";
+			Affiche_lentier(a);
+			cout << endl;
+		}
+		
+	}
+	if (a.p[0] >= b.p[0]) {
+		res.q.p[0] = a.p[a.size - 1] / b.p[0];
+		temp = estEgal(a);
+		delete[]a.p;
+		multi = mult_lentier_entier(b, res.q.p[0]);
+		cout << "multi ";
+		Affiche_lentier(multi);
+		cout << endl;
+		a = sub_lentier(temp, multi);
+		delete[]multi.p;
+		delete[]temp.p;
+		cout << "a: ";
+		Affiche_lentier(a);
+		cout << endl;
+	}
+	res.r = estEgal(a);
+	delete[]a.p;
+	delete[]b.p;
+	return res;
+
+	
+}
+lentier mult_lentier_entier(lentier a, unsigned int b) {
+	lentier s;
+	long long temp = 0;
+	int c = 0;
+	s.size = a.size + 1;
+	s.p = new unsigned int[s.size]();
+	for (int i = 0; i < a.size; i++) {
+		c = 0;
+		for (int j = 0; j < 1; j++) {
+			temp = s.p[i + j] + (unsigned long long)a.p[i] * b + c;
+			s.p[i + j] = temp & 0xFFFFFFFF;
+			c = temp >> 32;
+		}
+		s.p[i + 1] = c;
+	}
+	lAdjust(s);
+	return s;
 }

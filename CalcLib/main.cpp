@@ -34,8 +34,16 @@ int main(int argc, const char * argv[]) {
 
 	a = dec2lentier(chaineParse[0]);
 	b = dec2lentier(chaineParse[2]);
-
-	switch(chaineParse[1][0]){
+	/*a.size = 20;
+	b.size = 6;
+	a.p = new unsigned int[a.size]();
+	b.p = new unsigned int[b.size]();
+	a.p[19] = 9158188;
+	b.p[5] = 188817;*/
+	res = div_eucl(a, b);
+	Affiche_lentier(res.r);
+	Affiche_lentier(res.q);
+	/*switch(chaineParse[1][0]){
 		case '+':
 			s = add_lentier(a,b);
 			break;
@@ -68,9 +76,12 @@ int main(int argc, const char * argv[]) {
 	}
 	cout << endl;
 	cout << "s = ";
-	Affiche_lentier(s);
+	Affiche_lentier(s);*/
 
-	delete[] s.p;
+	delete[] res.r.p;
+	delete[] res.q.p;
+	delete[]a.p;
+	delete[]b.p;
 
 
 	return 0;
