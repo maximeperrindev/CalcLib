@@ -8,7 +8,33 @@ using namespace std;
 int getNumbersChar(char* a) {
 	return strlen(a);
 }
-
+char *int2char(int nbr)
+{
+    int i = 0;
+    char temp[255] = { 0 }; //Tableau tampon
+    char *p; //Pointeur qu'on va retourner
+  
+    //Boucle pour convertir notre int en ASCII tant que nbr est assez grand
+    do
+    {
+        temp[i] = 48 + nbr%10;
+        nbr = nbr/10;
+        i++;
+    } while(nbr);
+  
+    //On vérifie que l'allocation mémoire s'effectue, dans le cas contraire on retourne NULL (gestion des exceptions)
+    if ((p = (char*)malloc((i+1) * sizeof(char))) == NULL){
+       return (NULL);
+    }
+    p[i] = '\0'; //Caractère de fin de chaîne à l'indice i (taille du tableau final)
+  
+    for(int j = 0 ; j < i ; j++){
+        p[j] = temp[(i-1)-j]; //On copie le tableau tampon dans le char* qu'on retournera
+    }
+  
+//On retourne le pointeur (ne pas oublier de libérer la mémoire après utilisation)
+    return p;
+}
 lentier dec2lentier(char* a) {
 	lentier s, base10, giga, x, y; //Variables utilisées
 

@@ -15,8 +15,8 @@ using namespace std;
 #include "fonctions.h"
 
 int main(int argc, const char * argv[]) {
-	
-
+    char* nbr = int2char(223242948);
+    cout<<nbr<<endl;
 	lentier s;
 	lentier a;
 	lentier b;
