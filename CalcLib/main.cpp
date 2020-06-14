@@ -33,6 +33,7 @@ int main(int argc, const char * argv[]) {
 	chaineParse = parser(saisieUtilisateur);
 
 	a = dec2lentier(chaineParse[0]);
+
 	b = dec2lentier(chaineParse[2]);
 
 	switch(chaineParse[1][0]){
@@ -52,26 +53,37 @@ int main(int argc, const char * argv[]) {
 			}
 			break;
 		case '/':
-			res = div_eucl(a,b);
-			s = res.q;
+			if (b.size == 1) {
+				res = div_eucl_1case(a, b);
+				s = estEgal(res.q);
+				delete[] res.r.p;
+				delete[] res.q.p;
+			}
+			else {
+				res = div_eucl(a, b);
+				s = estEgal(res.q);
+				delete[] res.r.p;
+				delete[] res.q.p;
+			}
 			break;
 		case 'm':
 			res = div_eucl(a,b);
-			s = res.r;
+			s = estEgal(res.r);
+			delete[] res.r.p;
+			delete[] res.q.p;
 			break;
 		case '^' :
 			s = exp_mod(a,b, dec2lentier(chaineParse[4]));
 			break;
 		default:
-			cout << "Erreur: vous devez entrer une chaîne de forme correcte" << endl;
+			std::cout << "Erreur: vous devez entrer une chaîne de forme correcte" << endl;
 			goto start;
 	}
-	cout << endl;
-	cout << "s = ";
+	std::cout << endl;
+	std::cout << "s = ";
 	Affiche_lentier(s);
-
-	delete[] s.p;
 
 
 	return 0;
 }
+

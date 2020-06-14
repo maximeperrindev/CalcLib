@@ -10,50 +10,52 @@ int getNumbersChar(char* a) {
 }
 
 lentier dec2lentier(char* a) {
-	lentier s, base10, giga, x,y; //Variables utilisées
+	lentier s, base10, giga, x, y; //Variables utilisées
 
 	int taille = getNumbersChar(a); //On récupère la taille de la chaîne passée en paramètre
 
-    //Création du lentier pour le nombre en base 10
-	base10.size = floor((getNumbersChar(a) * log(10)) / (32 * log(2))) + 1;
+	//Création du lentier pour le nombre en base 10
+	base10.size = floor(getNumbersChar(a)/9)+1;
 	base10.p = new unsigned int[base10.size]();
 
-    //Création du lentier 10^9 pour changer de base
-    giga.size = 1;
-    giga.p = new unsigned int[giga.size]();
-    giga.p[0] = powl(10,9);
+	//Création du lentier 10^9 pour changer de base
+	giga.size = 1;
+	giga.p = new unsigned int[giga.size]();
+	giga.p[0] = powl(10, 9);
 
-    //Boucle qui transforme notre chaîne de caractère en lentier
+	//Boucle qui transforme notre chaîne de caractère en lentier
 	for (int i = 0; i < base10.size; i++) {
 		for (int y = i * 9; y < taille && y < (i + 1) * 9; y++) {
 			base10.p[i] += (int)(a[taille - y - 1] - 48) * powl(10, y - i * 9);
 		}
 	}
+	
 
-    //Création de la variable x qui a comme première valeur la case de poids faible de base10
-    x.size = 1;
-    x.p = new unsigned int[x.size]();
-    x.p[0] = base10.p[base10.size-1];
-    
-    //Schéma de Horner
-    for(int i = base10.size - 1; i > 0; i--){
-        y.size  = 1;
+	//Création de la variable x qui a comme première valeur la case de poids faible de base10
+	x.size = 1;
+	x.p = new unsigned int[x.size]();
+	x.p[0] = base10.p[base10.size - 1];
 
-        y.p = new unsigned int[x.size]();
+	y.size = 1;
 
-        y.p[0] = base10.p[i-1];
-        
-        s = mult_classique(x, giga);
-        
-        delete[] x.p;
-        
-        x = add_lentier(s, y);
-        delete[] s.p;
-    }
-    
-    //On supprime les 0 inutiles
-    lAdjust(x);
-    
+	y.p = new unsigned int[x.size]();
+
+	//Schéma de Horner
+	for (int i = base10.size - 1; i > 0; i--) {
+		
+		y.p[0] = base10.p[i - 1];
+
+		s = mult_classique(x, giga);
+
+		delete[] x.p;
+
+		x = add_lentier(s, y);
+		delete[] s.p;
+	}
+
+	//On supprime les 0 inutiles
+	lAdjust(x);
+
 	return x;
 }
 
@@ -66,7 +68,7 @@ char cmp_lentier(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 		return -1;
 	}
 	else {
-		for (int i = a.size-1; i >=0; i--) {
+		for (int i = a.size - 1; i >= 0; i--) {
 			if (a.p[i] > b.p[i]) {
 				return 1;
 			}
@@ -85,7 +87,7 @@ lentier add_lentier(lentier a, lentier b) {
 	//Création du lentier s
 	lentier s;
 	if (a.size >= b.size) {
-		s.size = a.size+1;
+		s.size = a.size + 1;
 		tailleMax = b.size;
 	}
 	else {
@@ -93,36 +95,36 @@ lentier add_lentier(lentier a, lentier b) {
 		tailleMax = a.size;
 	}
 	s.p = new unsigned int[s.size]();
-    
-    for(int i = 0; i < tailleMax; i++){
-        temp = (unsigned long long)a.p[i] + b.p[i] + c;
-        c = temp >> 32;
-        s.p[i] = temp & 0xFFFFFFFF;
-    }
-    if(a.size > b.size){
-        for(int i = b.size; i < a.size; i++){
-            temp = (unsigned long long)a.p[i] + c;
-            c = temp >> 32;
-            s.p[i] = temp & 0xFFFFFFFF;
-        }
-    }
-    else if(b.size > a.size){
-        for(int i = a.size; i < b.size; i++){
-            temp = (unsigned long long)b.p[i] + c;
-            c = temp >> 32;
-            s.p[i] = temp & 0xFFFFFFFF;
-        }
-    }
-    s.p[s.size-1] = c;
+
+	for (int i = 0; i < tailleMax; i++) {
+		temp = (unsigned long long)a.p[i] + b.p[i] + c;
+		c = temp >> 32;
+		s.p[i] = temp & 0xFFFFFFFF;
+	}
+	if (a.size > b.size) {
+		for (int i = b.size; i < a.size; i++) {
+			temp = (unsigned long long)a.p[i] + c;
+			c = temp >> 32;
+			s.p[i] = temp & 0xFFFFFFFF;
+		}
+	}
+	else if (b.size > a.size) {
+		for (int i = a.size; i < b.size; i++) {
+			temp = (unsigned long long)b.p[i] + c;
+			c = temp >> 32;
+			s.p[i] = temp & 0xFFFFFFFF;
+		}
+	}
+	s.p[s.size - 1] = c;
 	lAdjust(s);
 	return s;
 }
 
 lentier sub_lentier(lentier a, lentier b) {
-    int c = 0;
-    long long temp = 0;
+	int c = 0;
+	long long temp = 0;
 	int tailleMax = 0;
-	lentier s;	
+	lentier s;
 
 	if (cmp_lentier(a, b) >= 0) {
 		s.size = a.size;
@@ -160,9 +162,9 @@ lentier sub_lentier(lentier a, lentier b) {
 				s.p[i] = temp & 0xFFFFFFFF;
 			}
 		}
-	} 
+	}
 	lAdjust(s);
-    return s;
+	return s;
 }
 
 lentier mult_classique(lentier a, lentier b) {
@@ -186,17 +188,33 @@ lentier mult_classique(lentier a, lentier b) {
 
 res_div div_eucl(lentier adiv, lentier bdiv) {
 
-	lentier a, b;
+	lentier a, b, btemp;
 	lentier q;
 	lentier ctemp;
 	res_div res;
 
 	lentier Atemp;
 
+	unsigned long long lambda = 0;
+
 	a = estEgal(adiv);
 	b = estEgal(bdiv);
 	lAdjust(a);
 	lAdjust(b);
+
+	while (b.p[b.size - 1] < 2147483648) {	
+		lambda++;
+		btemp = mult_lentier_entier(b, 2);
+		delete[] b.p;
+		b = estEgal(btemp);
+		delete[] btemp.p;
+	}
+	if (lambda > 0) {
+		Atemp = mult_lentier_entier(a, pow(2, lambda));
+		delete[] a.p;
+		a = estEgal(Atemp);
+		delete[] Atemp.p;
+	}
 
 	unsigned int exp = 0; //exposant
 
@@ -209,8 +227,6 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 	lentier multi;
 
 	multi = decalage('1', exp, b);
-	cout << "multi:";
-	Affiche_lentier(multi);
 	lentier atemp;
 
 	while (cmp_lentier(a, multi) >= 0) {
@@ -228,23 +244,17 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 		delete[]atemp.p;
 
 		delete[] multi.p;
-		cout << "a:";
-		Affiche_lentier(a);
 		if ((long long int)(a.size) - b.size + 1 > 0) {
-			
-			exp = a.size - b.size;
-			cout << "exp: " << exp << endl;
-			multi = decalage('1', exp, b); //Br^n-t;
-			cout << "multi:";
-			Affiche_lentier(multi);
 
-			
-			
+			exp = a.size - b.size;
+
+			multi = decalage('1', exp, b); //Br^n-t;		
+
 		}
 		else {
 			break;
 		}
-		
+
 	}
 
 	atemp = estEgal(a);//permet de retourner a si on rentre pas dans le for suivant
@@ -253,14 +263,8 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 	//ça marche jusque là
 	if (a.size >= 1) {
 
-
-
-
 		for (unsigned int i = a.size - 1; i >= b.size; i--) {
 			//a
-			Affiche_lentier(q);
-			cout << "r= ";
-			Affiche_lentier(atemp);
 
 			if (a.p[i] == b.p[b.size - 1]) {
 				q.p[i - b.size] = 4294967295;
@@ -275,7 +279,6 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			/*while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
 				(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
 				(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
-
 				q.p[i - b.size]--;
 			}*/
 
@@ -310,19 +313,12 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			delete[]abis.p;
 			delete[]qbis.p;
 			delete[]bis.p;
-
-
-
-
 			//c
 
 
 			ctemp.size = i - b.size + 1;
 
 			exp = i - b.size;
-			cout << "exp= " << exp << endl;
-
-
 
 			ctemp.p = new unsigned int[ctemp.size];
 			lentier q2;
@@ -330,15 +326,11 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			q2.p = new unsigned int[q.size];
 			q2.p[0] = q.p[i - b.size];
 			ctemp = decalage('1', exp, q2); //Qi-t*r^i-t
-			cout << "ctemp: " << endl;
-			Affiche_lentier(ctemp);
 
 			multi = mult_classique(ctemp, b);
 			lAdjust(multi);
-			cout << "multi: " << endl;
-			Affiche_lentier(multi);
-			delete[]ctemp.p;//CEST TOUT BON
 
+			delete[]ctemp.p;//CEST TOUT BON
 
 			if (cmp_lentier(atemp, multi) >= 0) {
 
@@ -371,23 +363,38 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			lAdjust(atemp);
 			delete[] Atemp.p;
 			/////////////////////////////////////////////////////////////////////// pas sur
-			if ((atemp.size - 1) < b.size) {
+			if (cmp_lentier(atemp,b)<0) {
 				break;
 			}
 		}
 	}
 	else {
-	atemp.size = 1;
-	atemp.p = new unsigned int[1];
-	atemp.p[0] = 0;
+		atemp.size = 1;
+		atemp.p = new unsigned int[1];
+		atemp.p[0] = 0;
 	}
-	res.q = q;
-	res.r = atemp;
+	if (lambda > 0) {
+		lentier l;
+		res_div res_temp;
+		l.p = new unsigned int[1];
+		l.size = 1;
+		l.p[0] = pow(2,lambda);
+		res_temp = div_eucl_1case(atemp, l);
+		res.r = estEgal(res_temp.q);
+		delete[] res_temp.q.p;
+		delete[] res_temp.r.p;
+	}
+	else {
+		res.r = estEgal(atemp);
+	}
+	res.q = estEgal(q);
+	delete[] q.p;
+	delete[] atemp.p;
 	return res;
 }
 
 void lAdjust(lentier& a) {
-	unsigned int i = a.size-1;
+	unsigned int i = a.size - 1;
 	while (a.p[i] == 0) {
 		i--;
 	}
@@ -396,17 +403,17 @@ void lAdjust(lentier& a) {
 
 char** parser(char* chaine) {
 	int taille = strlen(chaine);
-	char** chaineSep = new char*[6]();
+	char** chaineSep = new char* [6]();
 	int arret = 0;
 	int separation = 0;
 	int boucle = 1;
 	int caseRempli = 0;
 	while (boucle == 1) {
-		for (int i = arret; i <= taille+1; i++) {
+		for (int i = arret; i <= taille + 1; i++) {
 			if (chaine[i] < 48 || chaine[i] > 57) {
-				chaineSep[caseRempli] = new char[i-arret+1]();
+				chaineSep[caseRempli] = new char[i - arret + 1]();
 				for (int y = arret; y < i; y++) {
-					chaineSep[caseRempli][y-arret] = chaine[y];
+					chaineSep[caseRempli][y - arret] = chaine[y];
 				}
 				chaineSep[caseRempli][i - arret] = '\0';
 				if (chaine[i] != '\0') {
@@ -421,8 +428,8 @@ char** parser(char* chaine) {
 					break;
 				}
 				break;
-			}		
-		}			
+			}
+		}
 	}
 	chaineSep[caseRempli + 1] = new char[1]();
 	return chaineSep;
@@ -440,19 +447,19 @@ lentier mul_mod(lentier a, lentier b, lentier n) {
 lentier exp_mod(lentier a, lentier b, lentier n) {
 	lentier p;
 	lentier e;
-	p = a;
+	p = estEgal(a);
 	unsigned long long nbBit;
 	nbBit = (32 * (n.size - 1) + log2(n.p[n.size - 1]) / log2(2));
-	for (int i =nbBit ; i >=0; i--) {
+	for (int i = nbBit; i >= 0; i--) {
 		p = mul_mod(p, p, n);
-		if (dec2bin(n.p[i/32],i%32)== 1) {
+		if (dec2bin(n.p[i / 32], i % 32) == 1) {
 			p = mul_mod(p, a, n);
 		}
 	}
 	return p;
 }
 
-bool dec2bin(unsigned int a,int decalage) {
+bool dec2bin(unsigned int a, int decalage) {
 	bool binaire;
 	a = a >> decalage;
 	binaire = a & 0b1;
@@ -508,16 +515,26 @@ lentier estEgal(lentier a) {
 
 }
 lentier add_lentier_entier(lentier l, unsigned int a) {
+	bool c = 0;
+	unsigned long long temp = 0;
+	int tailleMax = 0;
+	//Création du lentier s
+	lentier s;
+	s.size = l.size + 1;
+	s.p = new unsigned int[s.size]();
 
-	lentier res, b;
-	b.size = 1;
-	b.p = new unsigned int[b.size];
-
-	b.p[0] = a;
-
-	res = add_lentier(l, b);
-
-	return res;
+	temp = (unsigned long long)l.p[0] + a;
+	c = temp >> 32;
+	s.p[0] = temp & 0xFFFFFFFF;
+	
+	for (int i = 1; i < l.size; i++) {
+		temp = (unsigned long long)l.p[i] + c;
+		c = temp >> 32;
+		s.p[i] = temp & 0xFFFFFFFF;
+	}
+	s.p[s.size - 1] = c;
+	lAdjust(s);
+	return s;
 }
 
 lentier add_entier_entier(unsigned int a, unsigned int b) {
@@ -533,5 +550,86 @@ lentier add_entier_entier(unsigned int a, unsigned int b) {
 
 	lAdjust(res);
 	return res;
-	
+
+}
+
+res_div div_eucl_1case(lentier adiv, lentier bdiv) {
+	lentier a, b, temp, multi, decale;
+	a = estEgal(adiv);
+	b = estEgal(bdiv);
+	res_div res;
+	res.q.size = a.size - b.size + 1;
+	res.q.p = new unsigned int[res.q.size]();
+	res.r.size = b.size;
+	res.r.p = new unsigned int[res.r.size]();
+
+	while (a.size > 1) {
+
+		if (a.p[a.size - 1] >= b.p[0]) {
+
+			res.q.p[a.size - b.size] = a.p[a.size - 1] / b.p[0];
+			temp = estEgal(a);
+			delete[]a.p;
+			multi = mult_lentier_entier(b, res.q.p[a.size - b.size]);
+			
+			decale = decalage('1', a.size - 1, multi);
+			
+			a = sub_lentier(temp, decale);
+			delete[]multi.p;
+			delete[]temp.p;
+			delete[]decale.p;
+			
+		}
+		else {
+			
+			res.q.p[a.size - 1 - b.size] = ((unsigned long long)(a.p[a.size - 1]) * pow(2, 32) + a.p[a.size - 2]) / b.p[b.size - 1];
+
+			temp = estEgal(a);
+			delete[]a.p;
+			multi = mult_lentier_entier(b, res.q.p[a.size - 1 - b.size]);
+			
+			decale = decalage('1', a.size - 2, multi);
+			
+			a = sub_lentier(temp, decale);
+			delete[]multi.p;
+			delete[]temp.p;
+			delete[]decale.p;
+		
+		}
+
+	}
+	if (a.p[0] >= b.p[0]) {
+		res.q.p[0] = a.p[a.size - 1] / b.p[0];
+		temp = estEgal(a);
+		delete[]a.p;
+		multi = mult_lentier_entier(b, res.q.p[0]);
+		
+		a = sub_lentier(temp, multi);
+		delete[]multi.p;
+		delete[]temp.p;
+		
+	}
+	res.r = estEgal(a);
+	delete[]a.p;
+	delete[]b.p;
+	return res;
+}
+
+lentier mult_lentier_entier(lentier a, unsigned int b) {
+	lentier s;
+	long long temp = 0;
+	int c = 0;
+	s.size = a.size + 1;
+	s.p = new unsigned int[s.size]();
+	for (int i = 0; i < a.size; i++) {
+		c = 0;
+		for (int j = 0; j < 1; j++) {
+			temp = s.p[i + j] + (unsigned long long)a.p[i] * b + c;
+			s.p[i + j] = temp & 0xFFFFFFFF;
+			c = temp >> 32;
+		}
+		s.p[i + 1] = c;
+	}
+	lAdjust(s);
+	return s;
 }

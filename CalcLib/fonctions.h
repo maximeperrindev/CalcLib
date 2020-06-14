@@ -52,3 +52,8 @@ lentier add_lentier_entier(lentier, unsigned int);
 
 lentier add_entier_entier(unsigned int, unsigned int);
 
+res_div div_eucl_1case(lentier adiv, lentier bdiv);
+
+lentier mult_lentier_entier(lentier, unsigned int);
+
+char* lentier2dec(lentier);
