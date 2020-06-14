@@ -15,7 +15,7 @@ using namespace std;
 #include "fonctions.h"
 
 int main(int argc, const char * argv[]) {
-    char* nbr = int2char(223242948);
+    char* nbr = int2char(10);
     cout<<nbr<<endl;
 	lentier s;
 	lentier a;
@@ -83,8 +83,7 @@ int main(int argc, const char * argv[]) {
 	std::cout << "s = ";
 	char* chaine;
 	chaine=lentier2dec(s);
-	
-
+	cout << chaine << endl;
 
 	return 0;
 }

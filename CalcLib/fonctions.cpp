@@ -12,7 +12,7 @@ char *int2char(unsigned int nbr)
 {
     unsigned int i = 0;
     char temp[255] = { 0 }; //Tableau tampon
-    char *p; //Pointeur qu'on va retourner
+    char *p = new char[10]; //Pointeur qu'on va retourner
   
     //Boucle pour convertir notre int en ASCII tant que nbr est assez grand
     do
@@ -23,15 +23,15 @@ char *int2char(unsigned int nbr)
     } while(nbr);
   
     //On vérifie que l'allocation mémoire s'effectue, dans le cas contraire on retourne NULL (gestion des exceptions)
-    if ((p = (char*)malloc((i+1) * sizeof(char))) == NULL){
-       return (NULL);
-    }
-    p[i] = '\0'; //Caractère de fin de chaîne à l'indice i (taille du tableau final)
+    
+    p[9] = '\0'; //Caractère de fin de chaîne à l'indice i (taille du tableau final)
   
-    for(int j = 0 ; j < i ; j++){
-        p[j] = temp[(i-1)-j]; //On copie le tableau tampon dans le char* qu'on retournera
+    for(unsigned int j = 8 ; j > 8-i ; j--){
+        p[j] = temp[8-j]; //On copie le tableau tampon dans le char* qu'on retournera
     }
-  
+	for (unsigned int j = 9-i; j > 0; j--) {
+		p[j-1] = '0';
+	}
 //On retourne le pointeur (ne pas oublier de libérer la mémoire après utilisation)
     return p;
 }
@@ -530,16 +530,24 @@ lentier decalage(char sens, unsigned int decal, lentier a) {
 lentier estEgal(lentier a) {
 	lentier res;
 
-	res.size = a.size;
-	res.p = new unsigned int[res.size];
-
-	for (unsigned int i = 0; i < a.size; i++) {
-		res.p[i] = a.p[i];
+	if (a.size == 0) {
+		res.size = 1;
+		res.p = new unsigned int[res.size];
+		res.p[0] = 0;
 	}
+	else {
+		res.size = a.size;
+		res.p = new unsigned int[res.size];
 
+		for (unsigned int i = 0; i < a.size; i++) {
+			res.p[i] = a.p[i];
+		}
+	}
+	lAdjust(res);
 	return res;
 
 }
+
 lentier add_lentier_entier(lentier l, unsigned int a) {
 	bool c = 0;
 	unsigned long long temp = 0;
@@ -663,9 +671,11 @@ char* lentier2dec(lentier a) {
 
 	char* chfinal = new char[a.size*9+1];
 	char* ch;
+	char resteChar;
 	res_div res, temp;
 	lentier go;
 	unsigned int* reste = new unsigned int[a.size];
+	unsigned int* quotient = new unsigned int[a.size];
 	unsigned int nombre = 0;
 	go.size = 1;
 	go.p = new unsigned int[go.size];
@@ -676,27 +686,32 @@ char* lentier2dec(lentier a) {
 	res.r.p = new unsigned int[a.size]();
 
 	res.q = estEgal(a);
-	chfinal[a.size * 9 + 1] = '\0';
+	chfinal[a.size * 9] = '\0';
 	unsigned int i = 0;
-	unsigned int rang = 0;
+	unsigned int rang = a.size*9;
 	while (cmp_lentier(res.q, go) >= 0) {
 
 		temp = div_eucl_1case(res.q, go);
 		delete[] res.q.p;
 		reste[i] = temp.r.p[0];
+		quotient[i] = temp.q.p[0];
 		res.q = estEgal(temp.q);
 		delete[]temp.r.p;
 		delete[]temp.q.p;
 		
-		nombre = log(reste[i] + 1);
-		rang = (a.size - i )* 9;
 		ch = int2char(reste[i]);
-		for (unsigned int j = 0; j < nombre; j++) {
-			chfinal[rang - j] = ch[8-j];
+		
+		for (unsigned int j = 0; j < 9; j++) {
+			chfinal[rang - j-1] = ch[8-j];
 		}
+		resteChar = ch[0];
+		rang = rang - 9;
 		i++;
-		delete[]ch;
 	}
-	
+	ch = int2char(res.q.p[0]);
+	nombre = log10(quotient[i-1]) + 1;
+	for (unsigned int j = nombre; j >0; j--) {
+		chfinal[8+j-nombre] = ch[8+j-nombre];
+	}
 	return chfinal;
 }
