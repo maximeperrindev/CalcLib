@@ -12,6 +12,8 @@ typedef struct {
 }
 res_div;
 
+char *int2char(int nbr);
+
 int getNumbersChar(char* );
 
 void checkCharLength(char*, char*);
