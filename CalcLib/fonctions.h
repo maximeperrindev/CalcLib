@@ -12,7 +12,7 @@ typedef struct {
 }
 res_div;
 
-char *int2char(int nbr);
+char *int2char(unsigned int nbr);
 
 int getNumbersChar(char* );
 

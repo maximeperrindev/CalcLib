@@ -81,7 +81,9 @@ int main(int argc, const char * argv[]) {
 	}
 	std::cout << endl;
 	std::cout << "s = ";
-	Affiche_lentier(s);
+	char* chaine;
+	chaine=lentier2dec(s);
+	
 
 
 	return 0;

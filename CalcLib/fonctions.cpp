@@ -8,9 +8,9 @@ using namespace std;
 int getNumbersChar(char* a) {
 	return strlen(a);
 }
-char *int2char(int nbr)
+char *int2char(unsigned int nbr)
 {
-    int i = 0;
+    unsigned int i = 0;
     char temp[255] = { 0 }; //Tableau tampon
     char *p; //Pointeur qu'on va retourner
   
@@ -658,4 +658,45 @@ lentier mult_lentier_entier(lentier a, unsigned int b) {
 	}
 	lAdjust(s);
 	return s;
+}
+char* lentier2dec(lentier a) {
+
+	char* chfinal = new char[a.size*9+1];
+	char* ch;
+	res_div res, temp;
+	lentier go;
+	unsigned int* reste = new unsigned int[a.size];
+	unsigned int nombre = 0;
+	go.size = 1;
+	go.p = new unsigned int[go.size];
+	go.p[0] = 1000000000;
+	res.q.size = a.size;
+	res.q.p = new unsigned int[a.size]();
+	res.r.size = a.size;
+	res.r.p = new unsigned int[a.size]();
+
+	res.q = estEgal(a);
+	chfinal[a.size * 9 + 1] = '\0';
+	unsigned int i = 0;
+	unsigned int rang = 0;
+	while (cmp_lentier(res.q, go) >= 0) {
+
+		temp = div_eucl_1case(res.q, go);
+		delete[] res.q.p;
+		reste[i] = temp.r.p[0];
+		res.q = estEgal(temp.q);
+		delete[]temp.r.p;
+		delete[]temp.q.p;
+		
+		nombre = log(reste[i] + 1);
+		rang = (a.size - i )* 9;
+		ch = int2char(reste[i]);
+		for (unsigned int j = 0; j < nombre; j++) {
+			chfinal[rang - j] = ch[8-j];
+		}
+		i++;
+		delete[]ch;
+	}
+	
+	return chfinal;
 }
