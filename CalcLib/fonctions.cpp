@@ -5,9 +5,19 @@ using namespace std;
 
 #include"fonctions.h"
 
-int getNumbersChar(char* a) {
+/*Role : Renvoie le nombre de caractère d'une chaine
+Entrée : Un pointeur vers une chaîne de caractère
+Sortie : Un entier positif*/
+unsigned int getNumbersChar(char* a) {
 	return strlen(a);
 }
+
+
+
+
+/*Role : Renvoie une chaine de caractère correspondant à un int
+Entrée : Un entier positif
+Sortie : Un pointeur vers une chaine de caractère*/
 char *int2char(unsigned int nbr)
 {
     unsigned int i = 0;
@@ -35,6 +45,13 @@ char *int2char(unsigned int nbr)
 //On retourne le pointeur (ne pas oublier de libérer la mémoire après utilisation)
     return p;
 }
+
+
+
+
+/*Role : Renvoie un lentier(base 2^32) correspondant à un nombre dans une chaines de caractères (base 10)
+Entrée : Un pointeur vers une chaîne de caractère
+Sortie : Un lentier */
 lentier dec2lentier(char* a) {
 	lentier s, base10, giga, x, y; //Variables utilisées
 
@@ -85,16 +102,22 @@ lentier dec2lentier(char* a) {
 	return x;
 }
 
+
+
+
+/*Role : Compare deux lentiers
+Entrée : Deux lentiers
+Sortie : Un char (compris entre -1 et 1)*/
 char cmp_lentier(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 {
-	if (a.size > b.size) {
+	if (a.size > b.size) { //Comparaison des tailles des lentiers
 		return 1;
 	}
 	else if (b.size > a.size) {
 		return -1;
 	}
 	else {
-		for (int i = a.size - 1; i >= 0; i--) {
+		for (int i = a.size - 1; i >= 0; i--) { //Si les tailles sont égales, comparaison case par case
 			if (a.p[i] > b.p[i]) {
 				return 1;
 			}
@@ -106,13 +129,20 @@ char cmp_lentier(lentier a, lentier b) //Renvoie 1 si a > b, 0 si a=b, -1 sinon
 	}
 }
 
+
+
+
+/*Role : Renvoie le resultat de l'addition de deux lentiers
+Entrée : Deux lentiers
+Sortie : Un lentier*/
 lentier add_lentier(lentier a, lentier b) {
 	bool c = 0;
 	unsigned long long temp = 0;
 	int tailleMax = 0;
 	//Création du lentier s
 	lentier s;
-	if (a.size >= b.size) {
+
+	if (a.size >= b.size) { //Taille de s = taille du plus grand + 1
 		s.size = a.size + 1;
 		tailleMax = b.size;
 	}
@@ -122,11 +152,14 @@ lentier add_lentier(lentier a, lentier b) {
 	}
 	s.p = new unsigned int[s.size]();
 
-	for (int i = 0; i < tailleMax; i++) {
-		temp = (unsigned long long)a.p[i] + b.p[i] + c;
-		c = temp >> 32;
-		s.p[i] = temp & 0xFFFFFFFF;
+	//Ajout des cases une par une tant que la taille du plus petit tableau n'est pas dépassé
+	for (int i = 0; i < tailleMax; i++) { 
+		temp = (unsigned long long)a.p[i] + b.p[i] + c; //Calcul du resultat de l'addition sur 64 bits
+		c = temp >> 32; //Calcul de la retenue
+		s.p[i] = temp & 0xFFFFFFFF; //On enregistre les 32 premiers bits dans s
 	}
+
+	//Si a est plus grand on ajoute les cases restantes a s
 	if (a.size > b.size) {
 		for (int i = b.size; i < a.size; i++) {
 			temp = (unsigned long long)a.p[i] + c;
@@ -134,6 +167,7 @@ lentier add_lentier(lentier a, lentier b) {
 			s.p[i] = temp & 0xFFFFFFFF;
 		}
 	}
+
 	else if (b.size > a.size) {
 		for (int i = a.size; i < b.size; i++) {
 			temp = (unsigned long long)b.p[i] + c;
@@ -146,6 +180,12 @@ lentier add_lentier(lentier a, lentier b) {
 	return s;
 }
 
+
+
+
+/*Role : Renvoie le resultat de la soustraction de deux lentiers
+Entrée : Deux lentiers
+Sortie : Un lentier*/
 lentier sub_lentier(lentier a, lentier b) {
 	int c = 0;
 	long long temp = 0;
@@ -193,12 +233,21 @@ lentier sub_lentier(lentier a, lentier b) {
 	return s;
 }
 
-lentier mult_classique(lentier a, lentier b) {
+
+
+
+/*Role : Renvoie le resultat de la soustraction de deux lentiers
+Entrée : Deux lentiers
+Sortie : Un lentier*/
+lentier mult_classique(lentier a, lentier b) { 
+
 	lentier s;
 	unsigned long long temp = 0;
 	unsigned int c = 0;
 	s.size = a.size + b.size;
 	s.p = new unsigned int[s.size]();
+
+
 	for (int i = 0; i < a.size; i++) {
 		c = 0;
 		for (int j = 0; j < b.size; j++) {
@@ -212,6 +261,12 @@ lentier mult_classique(lentier a, lentier b) {
 	return s;
 }
 
+
+
+
+/*Role : Renvoie le résultat de la division de deux lentiers (quotient et reste)
+Entrée : Deux lentiers
+Sortie : Un res_div */
 res_div div_eucl(lentier adiv, lentier bdiv) {
 
 	lentier a, b, btemp;
@@ -419,6 +474,12 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 	return res;
 }
 
+
+
+
+/*Role : Modifier la taille d'un lentier si ses cases de poids forts sont égales à 0
+Entrée : Une référence vers un lentier
+Sortie : vide*/
 void lAdjust(lentier& a) {
 	unsigned int i = a.size - 1;
 	while (a.p[i] == 0) {
@@ -427,6 +488,12 @@ void lAdjust(lentier& a) {
 	a.size = i + 1;
 }
 
+
+
+
+/*Role : Formate la chaine de caractère du calcul rentré par l'utilisateur pour qu'elle soit dans le bon format
+Entrée : Un pointeur vers une chaîne de caractère
+Sortie : une pointeur vers un tableau de chaine de caractère */
 char** parser(char* chaine) {
 	int taille = strlen(chaine);
 	char** chaineSep = new char* [6]();
@@ -461,7 +528,13 @@ char** parser(char* chaine) {
 	return chaineSep;
 }
 
-//multiplication modulaire
+
+
+
+
+/*Role : Renvoie le resultat d'une multiplication modulaire
+Entrée : 3 lentiers
+Sortie : 1 lentier */
 lentier mul_mod(lentier a, lentier b, lentier n) {
 	lentier t;
 	res_div res;
@@ -482,7 +555,7 @@ lentier exp_mod(lentier a, lentier b, lentier n) {
 	p = estEgal(a);
 	unsigned long long nbBit;
 	nbBit = (32 * (n.size - 1) + log2(n.p[n.size - 1]) / log2(2));
-	for (int i = nbBit; i >= 0; i--) {
+	for (unsigned int i = nbBit; i >= 0; i--) {
 		ptemp = mul_mod(p, p, n);
 		delete[] p.p;
 		p = estEgal(ptemp);
@@ -497,6 +570,12 @@ lentier exp_mod(lentier a, lentier b, lentier n) {
 	return p;
 }
 
+
+
+
+/*Role : Renvoie la valeur d'un bit
+Entrée : Un entier positif et l'indice du bit que l'on souhaite récupérer
+Sortie :  Un booléen*/
 bool dec2bin(unsigned int a, int decalage) {
 	bool binaire;
 	a = a >> decalage;
@@ -506,6 +585,12 @@ bool dec2bin(unsigned int a, int decalage) {
 
 }
 
+
+
+
+/*Role : Afficher un lentier
+Entrée : Un lentier
+Sortie : vide */
 void Affiche_lentier(lentier a) {
 	for (unsigned int i = a.size; i > 0; i--) {
 		cout << a.p[i - 1] << "  ";
@@ -513,6 +598,12 @@ void Affiche_lentier(lentier a) {
 	cout << endl;
 }
 
+
+
+
+/*Role : Multiplie un lentier par 2^32 en faisant un décalage
+Entrée : Un char pour indiquer le sens (multplication ou division), un entier positif (le nombre de cases à décaler), un lentier
+Sortie : Un lentier */
 lentier decalage(char sens, unsigned int decal, lentier a) {
 	lentier res;
 	//1 gauche //2 droite
@@ -539,6 +630,12 @@ lentier decalage(char sens, unsigned int decal, lentier a) {
 	return res;
 }
 
+
+
+
+/*Role : Copier un lentier valeur par valeur dans un autre
+Entrée : Un lentier
+Sortie : Un lentier */
 lentier estEgal(lentier a) {
 	
 	lentier res;
@@ -561,6 +658,12 @@ lentier estEgal(lentier a) {
 
 }
 
+
+
+
+/*Role : Ajouter un lentier avec un entier (gestion des dépassements)
+Entrée : Un lentier et un entier positif
+Sortie : Un lentier */
 lentier add_lentier_entier(lentier l, unsigned int a) {
 	bool c = 0;
 	unsigned long long temp = 0;
@@ -584,6 +687,12 @@ lentier add_lentier_entier(lentier l, unsigned int a) {
 	return s;
 }
 
+
+
+
+/*Role : Ajoute deux entiers et le stock dans un lentier (gestion des dépassements)
+Entrée : Deux entiers positifs
+Sortie : Un lentier*/
 lentier add_entier_entier(unsigned int a, unsigned int b) {
 
 	lentier res, abis;
@@ -600,6 +709,12 @@ lentier add_entier_entier(unsigned int a, unsigned int b) {
 
 }
 
+
+
+
+/*Role : Renvoie le résultat d'une division euclidienne entre un lentier et un lentier de taille 1
+Entrée : Deux lentiers
+Sortie : Un res_div */
 res_div div_eucl_1case(lentier adiv, lentier bdiv) {
 	lentier a, b, temp, multi, decale;
 	a = estEgal(adiv);
@@ -662,6 +777,12 @@ res_div div_eucl_1case(lentier adiv, lentier bdiv) {
 	return res;
 }
 
+
+
+
+/*Role : Renvoie le résultat d'une multiplication entre un lentier et un entier positif
+Entrée : Un lentier et un entier positif
+Sortie : Un lentier */
 lentier mult_lentier_entier(lentier a, unsigned int b) {
 	lentier s;
 	long long temp = 0;
@@ -680,6 +801,13 @@ lentier mult_lentier_entier(lentier a, unsigned int b) {
 	lAdjust(s);
 	return s;
 }
+
+
+
+
+/*Role : Renvoie une chaîne de caractère correspondant au nombre en base 10 égal au lentier en base 2^32
+Entrée : Un lentier
+Sortie : Un pointeur vers une chaîne de caractère */
 char* lentier2dec(lentier a) {
 
 	int tailleChaine = floor((a.size * 32 * log(2)) / log(10))+1;
@@ -723,6 +851,7 @@ char* lentier2dec(lentier a) {
 		rang = rang - 9;
 		i++;
 	}
+
 	ch = int2char(res.q.p[0]);
     if(i >= 1){
 	nombre = log10(quotient[i-1]) + 1;
@@ -733,4 +862,4 @@ char* lentier2dec(lentier a) {
 		chfinal[rang+j-nombre-1] = ch[8+j-nombre];
 	}
 	return chfinal;
-}
+} 
