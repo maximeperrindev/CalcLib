@@ -724,7 +724,11 @@ char* lentier2dec(lentier a) {
 		i++;
 	}
 	ch = int2char(res.q.p[0]);
+    if(i >= 1){
 	nombre = log10(quotient[i-1]) + 1;
+    }else{
+        nombre = 9;
+    }
 	for (unsigned int j = nombre; j >0; j--) {
 		chfinal[rang+j-nombre-1] = ch[8+j-nombre];
 	}
