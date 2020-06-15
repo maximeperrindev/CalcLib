@@ -26,8 +26,8 @@ char *int2char(unsigned int nbr)
     
     p[9] = '\0'; //Caractère de fin de chaîne à l'indice i (taille du tableau final)
   
-    for(unsigned int j = 8 ; j > 8-i ; j--){
-        p[j] = temp[8-j]; //On copie le tableau tampon dans le char* qu'on retournera
+    for(unsigned int j = 9 ; j > 9-i ; j--){
+        p[j-1] = temp[9-j]; //On copie le tableau tampon dans le char* qu'on retournera
     }
 	for (unsigned int j = 9-i; j > 0; j--) {
 		p[j-1] = '0';
@@ -195,8 +195,8 @@ lentier sub_lentier(lentier a, lentier b) {
 
 lentier mult_classique(lentier a, lentier b) {
 	lentier s;
-	long long temp = 0;
-	int c = 0;
+	unsigned long long temp = 0;
+	unsigned int c = 0;
 	s.size = a.size + b.size;
 	s.p = new unsigned int[s.size]();
 	for (int i = 0; i < a.size; i++) {
@@ -466,20 +466,32 @@ lentier mul_mod(lentier a, lentier b, lentier n) {
 	lentier t;
 	res_div res;
 	t = mult_classique(a, b);
-	res = div_eucl(t, n);
+	if (n.size == 1) {
+		res = div_eucl_1case(t, n);
+	}
+	else {
+		res = div_eucl(t, n);
+	}
 	delete[] t.p;
+	delete[] res.q.p;
 	return res.r;
 }
 lentier exp_mod(lentier a, lentier b, lentier n) {
-	lentier p;
+	lentier p, ptemp;
 	lentier e;
 	p = estEgal(a);
 	unsigned long long nbBit;
 	nbBit = (32 * (n.size - 1) + log2(n.p[n.size - 1]) / log2(2));
 	for (int i = nbBit; i >= 0; i--) {
-		p = mul_mod(p, p, n);
+		ptemp = mul_mod(p, p, n);
+		delete[] p.p;
+		p = estEgal(ptemp);
+		delete[] ptemp.p;
 		if (dec2bin(n.p[i / 32], i % 32) == 1) {
-			p = mul_mod(p, a, n);
+			ptemp = mul_mod(p, a, n);
+			delete[] p.p;
+			p = estEgal(ptemp);
+			delete[] ptemp.p;
 		}
 	}
 	return p;
@@ -528,6 +540,7 @@ lentier decalage(char sens, unsigned int decal, lentier a) {
 }
 
 lentier estEgal(lentier a) {
+	
 	lentier res;
 
 	if (a.size == 0) {
@@ -537,7 +550,7 @@ lentier estEgal(lentier a) {
 	}
 	else {
 		res.size = a.size;
-		res.p = new unsigned int[res.size];
+		res.p = new unsigned int[res.size]();
 
 		for (unsigned int i = 0; i < a.size; i++) {
 			res.p[i] = a.p[i];
@@ -669,7 +682,8 @@ lentier mult_lentier_entier(lentier a, unsigned int b) {
 }
 char* lentier2dec(lentier a) {
 
-	char* chfinal = new char[a.size*9+1];
+	int tailleChaine = floor((a.size * 32 * log(2)) / log(10))+1;
+	char * chfinal = new char[tailleChaine+1];
 	char* ch;
 	char resteChar;
 	res_div res, temp;
@@ -686,9 +700,10 @@ char* lentier2dec(lentier a) {
 	res.r.p = new unsigned int[a.size]();
 
 	res.q = estEgal(a);
-	chfinal[a.size * 9] = '\0';
+	chfinal[tailleChaine] = '\0';
 	unsigned int i = 0;
-	unsigned int rang = a.size*9;
+	unsigned int rang = tailleChaine;
+
 	while (cmp_lentier(res.q, go) >= 0) {
 
 		temp = div_eucl_1case(res.q, go);
@@ -711,7 +726,7 @@ char* lentier2dec(lentier a) {
 	ch = int2char(res.q.p[0]);
 	nombre = log10(quotient[i-1]) + 1;
 	for (unsigned int j = nombre; j >0; j--) {
-		chfinal[8+j-nombre] = ch[8+j-nombre];
+		chfinal[rang+j-nombre-1] = ch[8+j-nombre];
 	}
 	return chfinal;
 }

@@ -15,8 +15,6 @@ using namespace std;
 #include "fonctions.h"
 
 int main(int argc, const char * argv[]) {
-    char* nbr = int2char(10);
-    cout<<nbr<<endl;
 	lentier s;
 	lentier a;
 	lentier b;
@@ -24,15 +22,16 @@ int main(int argc, const char * argv[]) {
 
 	res_div res;
 
+	char* chaine;
 	char* saisieUtilisateur = new char[200];
 	char** chaineParse;
 	
-
 	start:cin >> saisieUtilisateur;
 
 	chaineParse = parser(saisieUtilisateur);
 
 	a = dec2lentier(chaineParse[0]);
+	Affiche_lentier(a);
 
 	b = dec2lentier(chaineParse[2]);
 
@@ -81,8 +80,8 @@ int main(int argc, const char * argv[]) {
 	}
 	std::cout << endl;
 	std::cout << "s = ";
-	char* chaine;
-	chaine=lentier2dec(s);
+	Affiche_lentier(s);
+	chaine = lentier2dec(s);
 	cout << chaine << endl;
 
 	return 0;
