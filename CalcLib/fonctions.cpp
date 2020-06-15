@@ -343,7 +343,6 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 	lAdjust(a);
 	//ça marche jusque là
 	if (a.size >= 1) {
-
 		for (unsigned int i = a.size - 1; i >= b.size; i--) {
 			//a
 
@@ -352,7 +351,7 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			}
 			else {
 
-				q.p[i - b.size] = (a.p[i] * pow(2, 32) + a.p[i - 1]) / b.p[b.size - 1];
+				q.p[i - b.size] = (atemp.p[i] * pow(2, 32) + atemp.p[i - 1]) / b.p[b.size - 1];
 			}
 
 			//b
@@ -374,12 +373,12 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			qbis.p[0] = q.p[i - b.size];
 
 			x = mult_classique(qbis, bis);
-
+			
 			abis.size = 3;
 			abis.p = new unsigned int[abis.size];
-			abis.p[2] = a.p[i];
-			abis.p[1] = a.p[i - 1];
-			abis.p[0] = a.p[i - 2];
+			abis.p[2] = atemp.p[i];
+			abis.p[1] = atemp.p[i - 1];
+			abis.p[0] = atemp.p[i - 2];
 
 			while (cmp_lentier(x, abis) == 1) {
 				q.p[i - b.size]--;
@@ -406,11 +405,10 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			q2.size = 1;
 			q2.p = new unsigned int[q.size];
 			q2.p[0] = q.p[i - b.size];
-			ctemp = decalage('1', exp, q2); //Qi-t*r^i-t
+			ctemp = decalage('1', exp, b); //B*r^i-t
 
-			multi = mult_classique(ctemp, b);
+			multi = mult_classique(ctemp, q2);
 			lAdjust(multi);
-
 			delete[]ctemp.p;//CEST TOUT BON
 
 			if (cmp_lentier(atemp, multi) >= 0) {
@@ -420,17 +418,13 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			}
 			else {
 
-				lentier z;
-				z.size = 1;
-				z.p = new unsigned int[z.size];
-
-				z = add_entier_entier(q.p[i - b.size], 1);
+				unsigned int z = q.p[i - b.size] - 1;
 
 
 				ctemp = decalage('1', exp, b); //Br^i-t
 				delete[]multi.p;
-				multi = mult_classique(z, ctemp);
-				Atemp = add_lentier(atemp, multi);
+				multi = mult_lentier_entier(ctemp,z);
+				Atemp = sub_lentier(atemp, multi);
 				q.p[i - b.size]--;
 
 				delete[] ctemp.p;
@@ -549,13 +543,20 @@ lentier mul_mod(lentier a, lentier b, lentier n) {
 	delete[] res.q.p;
 	return res.r;
 }
+
+
+
+
+/*Role : Renvoie le résultat d'une exponentiation modulaire
+Entrée : 3 lentiers
+Sortie : 1 lentier */
 lentier exp_mod(lentier a, lentier b, lentier n) {
 	lentier p, ptemp;
 	lentier e;
 	p = estEgal(a);
 	unsigned long long nbBit;
 	nbBit = (32 * (n.size - 1) + log2(n.p[n.size - 1]) / log2(2));
-	for (unsigned int i = nbBit; i >= 0; i--) {
+	for (int i = nbBit-1; i >= 0; i--) {
 		ptemp = mul_mod(p, p, n);
 		delete[] p.p;
 		p = estEgal(ptemp);
