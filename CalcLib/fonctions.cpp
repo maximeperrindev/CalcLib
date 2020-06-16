@@ -275,14 +275,20 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 	res_div res;
 
 	lentier Atemp;
-
+	if (bdiv.size == 0) {
+		res.q.p = new unsigned int[1]();
+		res.r.p = new unsigned int[1]();
+		res.q.size = 1;
+		res.r.size = 1;
+		res.q.p[0] = 1;
+		return res;
+	}
 	unsigned long long lambda = 0;
 
 	a = estEgal(adiv);
 	b = estEgal(bdiv);
 	lAdjust(a);
 	lAdjust(b);
-
 	while (b.p[b.size - 1] < 2147483648) {	
 		lambda++;
 		btemp = mult_lentier_entier(b, 2);
@@ -555,13 +561,13 @@ lentier exp_mod(lentier a, lentier b, lentier n) {
 	lentier e;
 	p = estEgal(a);
 	unsigned long long nbBit;
-	nbBit = (32 * (n.size - 1) + log2(n.p[n.size - 1]) / log2(2));
-	for (int i = nbBit-1; i >= 0; i--) {
+	nbBit = (32 * (b.size - 1) + log2(b.p[b.size - 1]) / log2(2))+1;
+	for (int i = nbBit-2; i >= 0; i--) {
 		ptemp = mul_mod(p, p, n);
 		delete[] p.p;
 		p = estEgal(ptemp);
 		delete[] ptemp.p;
-		if (dec2bin(n.p[i / 32], i % 32) == 1) {
+		if (dec2bin(b.p[i >> 5], i &0x1F) == 1) {
 			ptemp = mul_mod(p, a, n);
 			delete[] p.p;
 			p = estEgal(ptemp);
@@ -812,7 +818,9 @@ Sortie : Un pointeur vers une chaîne de caractère */
 char* lentier2dec(lentier a) {
 
 	int tailleChaine = floor((a.size * 32 * log(2)) / log(10))+1;
+	unsigned int tailleFin = 0;
 	char * chfinal = new char[tailleChaine+1];
+	char* chReturn;
 	char* ch;
 	char resteChar;
 	res_div res, temp;
@@ -862,5 +870,15 @@ char* lentier2dec(lentier a) {
 	for (unsigned int j = nombre; j >0; j--) {
 		chfinal[rang+j-nombre-1] = ch[8+j-nombre];
 	}
-	return chfinal;
+	for (unsigned int i = 0; i < tailleChaine; i++) {
+		if (chfinal[i] >= 48 && chfinal[i] <= 57) {	
+			tailleFin++;
+		}
+	}
+	chReturn = new char[tailleFin + 1];
+	chReturn[tailleFin] = '\0';
+	for (unsigned int i = tailleChaine-1; i >= tailleChaine - tailleFin; i--) {
+		chReturn[i + tailleFin - tailleChaine] = chfinal[i];
+	}
+	return chReturn;
 } 

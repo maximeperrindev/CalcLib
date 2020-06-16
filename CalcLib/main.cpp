@@ -31,7 +31,6 @@ start:cin >> saisieUtilisateur;
 	chaineParse = parser(saisieUtilisateur);
 
 	a = dec2lentier(chaineParse[0]);
-	Affiche_lentier(a);
 
 	b = dec2lentier(chaineParse[2]);
 
