@@ -77,7 +77,6 @@ int main(int argc, const char* argv[]) {
 		std::cout << "Erreur: vous devez entrer une chaîne de forme correcte" << endl;
 		goto start;
 	}
-	std::cout << temps_cpu;
 	std::cout << endl;
 	std::cout << "s = ";
 	Affiche_lentier(s);
