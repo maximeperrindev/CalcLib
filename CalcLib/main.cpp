@@ -9,6 +9,7 @@
 #include <iostream>
 #include <math.h>
 #include <time.h>
+#include <ctime>
 
 using namespace std;
 
@@ -26,8 +27,7 @@ int main(int argc, const char* argv[]) {
 	char* saisieUtilisateur = new char[200];
 	char** chaineParse;
 
-start:cin >> saisieUtilisateur;
-
+	start:cin >> saisieUtilisateur;
 	chaineParse = parser(saisieUtilisateur);
 
 	a = dec2lentier(chaineParse[0]);
@@ -77,11 +77,15 @@ start:cin >> saisieUtilisateur;
 		std::cout << "Erreur: vous devez entrer une chaîne de forme correcte" << endl;
 		goto start;
 	}
+	std::cout << temps_cpu;
 	std::cout << endl;
 	std::cout << "s = ";
 	Affiche_lentier(s);
 	chaine = lentier2dec(s);
 	cout << chaine << endl;
 
+	delete[] s.p;
+	delete[] a.p;
+	delete[] b.p;
 	return 0;
 }
