@@ -27,7 +27,7 @@ int main(int argc, const char* argv[]) {
 	char* saisieUtilisateur = new char[200];
 	char** chaineParse;
 
-	start:cin >> saisieUtilisateur;
+start:cin >> saisieUtilisateur;
 	chaineParse = parser(saisieUtilisateur);
 
 	a = dec2lentier(chaineParse[0]);

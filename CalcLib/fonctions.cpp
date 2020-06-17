@@ -343,11 +343,10 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 		}
 
 	}
-
+	delete[] multi.p;
 	atemp = estEgal(a);//permet de retourner a si on rentre pas dans le for suivant
 	lAdjust(atemp);
 	lAdjust(a);
-	//ça marche jusque là
 	if (a.size >= 1) {
 		for (unsigned int i = a.size - 1; i >= b.size; i--) {
 			//a
@@ -361,12 +360,6 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			}
 
 			//b
-
-			/*while ((unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] > a.p[i] * pow(2, 32)) || (
-				(unsigned long long)(q.p[i - b.size] * b.p[b.size - 1] == a.p[i] * pow(2, 32)) &&
-				(unsigned long long)(q.p[i - b.size] * b.p[b.size - 2] > (a.p[i - 1] * pow(2, 32) + a.p[i - 2])))) {
-				q.p[i - b.size]--;
-			}*/
 
 			lentier x, bis, qbis, abis;
 
@@ -402,20 +395,18 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			//c
 
 
-			ctemp.size = i - b.size + 1;
 
 			exp = i - b.size;
-
-			ctemp.p = new unsigned int[ctemp.size];
 			lentier q2;
 			q2.size = 1;
 			q2.p = new unsigned int[q.size];
 			q2.p[0] = q.p[i - b.size];
+
 			ctemp = decalage('1', exp, b); //B*r^i-t
 
 			multi = mult_classique(ctemp, q2);
 			lAdjust(multi);
-			delete[]ctemp.p;//CEST TOUT BON
+			delete[]ctemp.p;
 
 			if (cmp_lentier(atemp, multi) >= 0) {
 
@@ -443,13 +434,13 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 			atemp = estEgal(Atemp);
 			lAdjust(atemp);
 			delete[] Atemp.p;
-			/////////////////////////////////////////////////////////////////////// pas sur
 			if (cmp_lentier(atemp,b)<0) {
 				break;
 			}
 		}
 	}
 	else {
+		delete[] atemp.p;
 		atemp.size = 1;
 		atemp.p = new unsigned int[1];
 		atemp.p[0] = 0;
@@ -462,6 +453,7 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 		l.p[0] = pow(2,lambda);
 		res_temp = div_eucl_1case(atemp, l);
 		res.r = estEgal(res_temp.q);
+		delete[] l.p;
 		delete[] res_temp.q.p;
 		delete[] res_temp.r.p;
 	}
@@ -733,9 +725,7 @@ res_div div_eucl_1case(lentier adiv, lentier bdiv) {
 	res.r.p = new unsigned int[res.r.size]();
 
 	while (a.size > 1) {
-
 		if (a.p[a.size - 1] >= b.p[0]) {
-
 			res.q.p[a.size - b.size] = a.p[a.size - 1] / b.p[0];
 			temp = estEgal(a);
 			delete[]a.p;
@@ -747,10 +737,8 @@ res_div div_eucl_1case(lentier adiv, lentier bdiv) {
 			delete[]multi.p;
 			delete[]temp.p;
 			delete[]decale.p;
-			
 		}
-		else {
-			
+		else {			
 			res.q.p[a.size - 1 - b.size] = ((unsigned long long)(a.p[a.size - 1]) * pow(2, 32) + a.p[a.size - 2]) / b.p[b.size - 1];
 
 			temp = estEgal(a);
@@ -763,9 +751,7 @@ res_div div_eucl_1case(lentier adiv, lentier bdiv) {
 			delete[]multi.p;
 			delete[]temp.p;
 			delete[]decale.p;
-		
 		}
-
 	}
 	if (a.p[0] >= b.p[0]) {
 		res.q.p[0] = a.p[a.size - 1] / b.p[0];
@@ -776,7 +762,6 @@ res_div div_eucl_1case(lentier adiv, lentier bdiv) {
 		a = sub_lentier(temp, multi);
 		delete[]multi.p;
 		delete[]temp.p;
-		
 	}
 	res.r = estEgal(a);
 	delete[]a.p;
