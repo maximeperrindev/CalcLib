@@ -473,11 +473,13 @@ res_div div_eucl(lentier adiv, lentier bdiv) {
 Entrée : Une référence vers un lentier
 Sortie : vide*/
 void lAdjust(lentier& a) {
-	unsigned int i = a.size - 1;
-	while (a.p[i] == 0) {
-		i--;
+	if (a.size > 0) {
+		unsigned int i = a.size - 1;
+		while (a.p[i] == 0) {
+			i--;
+		}
+		a.size = i + 1;
 	}
-	a.size = i + 1;
 }
 
 
